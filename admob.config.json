@@ -1,0 +1,7 @@
+{
+  "_help": "These are Google's official TEST ad IDs. They show clearly-labelled test ads and are safe to tap. Before publishing, replace all four values with your own IDs from admob.google.com (Apps > your app > Ad units). Then rebuild.",
+  "appId": "ca-app-pub-3940256099942544~3347511713",
+  "banner": "ca-app-pub-3940256099942544/6300978111",
+  "interstitial": "ca-app-pub-3940256099942544/1033173712",
+  "rewarded": "ca-app-pub-3940256099942544/5224354917"
+}

@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Zambia Quiz Challenge</title>
+<meta name="description" content="How well do you know Zambia? A quick quiz game with a leaderboard.">
+<meta name="theme-color" content="#0f1a12">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Zambia Quiz">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<style>
+  :root{--green:#198a00;--orange:#ef7d00;--red:#de2010;--black:#111;--bg:#0f1a12;--card:#1b2b20;--text:#f4f4f0}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  #app{max-width:480px;margin:0 auto;height:100%;display:flex;flex-direction:column;padding:16px}
+  .screen{display:none;flex:1;flex-direction:column}
+  .screen.active{display:flex}
+  h1{font-size:2rem;margin:8px 0;text-align:center}
+  .stripe{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--green) 25%,var(--red) 25% 50%,var(--black) 50% 75%,var(--orange) 75%);margin:6px 0 18px}
+  .center{margin:auto;text-align:center;width:100%}
+  button{font:inherit;border:0;border-radius:14px;padding:16px;width:100%;margin:8px 0;cursor:pointer;color:var(--text);background:var(--card);font-size:1.05rem;text-align:left}
+  button.primary{background:var(--green);text-align:center;font-weight:700;font-size:1.2rem}
+  button.reward{background:var(--orange);color:#111;text-align:center;font-weight:700}
+  button.ghost{background:transparent;border:2px solid var(--card);text-align:center}
+  button:active{transform:scale(.98)}
+  .hud{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
+  .bar{height:8px;background:var(--card);border-radius:4px;overflow:hidden;margin-bottom:16px}
+  .bar>i{display:block;height:100%;width:100%;background:var(--orange);transition:width .1s linear}
+  .q{font-size:1.3rem;font-weight:700;margin:8px 0 16px;line-height:1.35}
+  .opt.correct{background:var(--green)}
+  .opt.wrong{background:var(--red)}
+  .big{font-size:4rem;font-weight:800;color:var(--orange)}
+  .muted{opacity:.7}
+  input{font:inherit;width:100%;padding:14px;border-radius:14px;border:2px solid var(--card);background:var(--card);color:var(--text);margin:8px 0;text-align:center}
+  .row{display:flex;justify-content:space-between;padding:12px 14px;border-radius:12px;background:var(--card);margin:6px 0}
+  .row.me{outline:2px solid var(--orange)}
+  #boardList{overflow:auto;flex:1}
+  /* inside the Android app the real AdMob banner overlays the bottom, so keep this as empty space. The web version has no ads. */
+  #banner{display:none}
+  .native #banner{display:block;height:64px;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="stripe"></div>
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="center">
+      <div style="font-size:4rem">🇿🇲</div>
+      <h1>Zambia Quiz Challenge</h1>
+      <p class="muted">How well do you know Zambia?</p>
+      <p>Best score: <b id="best">0</b></p>
+      <input id="nameInput" maxlength="12" placeholder="Enter your name" autocomplete="off">
+      <button class="primary" id="playBtn">Play</button>
+      <button class="ghost" id="boardBtn">🏆 Leaderboard</button>
+      <button class="ghost" id="installBtn" style="display:none">📲 Install the app</button>
+      <p id="iosHint" class="muted" style="display:none">To install: tap Share, then "Add to Home Screen"</p>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section id="game" class="screen">
+    <div class="hud"><span>Score: <span id="score">0</span></span><span id="lives">❤️❤️❤️</span></div>
+    <div class="bar"><i id="timer"></i></div>
+    <div class="q" id="question"></div>
+    <div id="options"></div>
+  </section>
+
+  <!-- GAME OVER -->
+  <section id="over" class="screen">
+    <div class="center">
+      <h1>Game Over</h1>
+      <div class="big" id="finalScore">0</div>
+      <p class="muted" id="newBest"></p>
+      <p id="rank" style="font-weight:700;color:var(--orange)"></p>
+      <p id="adMsg" class="muted"></p>
+      <button class="reward" id="continueBtn">▶ Watch an ad to continue (+1 life)</button>
+      <button class="primary" id="againBtn">Play again</button>
+      <button class="ghost" id="shareBtn">Share my score</button>
+      <button class="ghost" id="boardBtn2">🏆 Leaderboard</button>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD -->
+  <section id="board" class="screen">
+    <h1>🏆 Top 10</h1>
+    <p id="boardNote" class="muted" style="text-align:center;margin:0 0 8px"></p>
+    <div id="boardList"></div>
+    <button class="primary" id="backBtn">Back</button>
+  </section>
+
+  <div id="banner"></div>
+</div>
+
+<script src="ads-config.js"></script>
+<script>
+/* ============ AD BRIDGE ============
+   Inside the Android app (Capacitor) these call Google AdMob. Ad unit IDs come from ads-config.js,
+   generated from admob.config.json. The web version (PWA) has no ads. */
+const AdBridge = (() => {
+  const C = window.ADS_CONFIG || {};
+  const cap = window.Capacitor;
+  const native = !!(cap && cap.isNativePlatform && cap.isNativePlatform());
+  const AdMob = native && ((cap.Plugins && cap.Plugins.AdMob) || (cap.registerPlugin && cap.registerPlugin('AdMob')));
+  const testing = !!C.testing;
+  let rewardedP = null, interstitialP = null;
+
+  const listen = (handles, event, fn) => AdMob.addListener(event, fn).then(h => handles.push(h));
+  const release = handles => { handles.forEach(h => { try { h.remove(); } catch (e) {} }); handles.length = 0; };
+  const within = (p, ms) => Promise.race([p.then(() => true), new Promise(r => setTimeout(() => r(false), ms))]);
+
+  function preloadRewarded() {
+    if (!AdMob || rewardedP) return;
+    rewardedP = AdMob.prepareRewardVideoAd({ adId: C.rewarded, isTesting: testing });
+    rewardedP.catch(() => { rewardedP = null; });
+  }
+  function preloadInterstitial() {
+    if (!AdMob || interstitialP) return;
+    interstitialP = AdMob.prepareInterstitial({ adId: C.interstitial, isTesting: testing });
+    interstitialP.catch(() => { interstitialP = null; });
+  }
+
+  return {
+    native,
+    async init() {
+      if (!AdMob) return;
+      try {
+        await AdMob.initialize({});
+        await AdMob.showBanner({ adId: C.banner, adSize: 'ADAPTIVE_BANNER', position: 'BOTTOM_CENTER', margin: 0, isTesting: testing });
+      } catch (e) {}
+      preloadRewarded();
+      preloadInterstitial();
+    },
+
+    // Player opted in to watch an ad. onReward() only runs if they earned the reward.
+    showRewarded(onReward, onFail) {
+      if (!AdMob) { if (onFail) onFail(); return; }
+      const handles = [];
+      let earned = false, finished = false;
+      const finish = ok => {
+        if (finished) return;
+        finished = true; release(handles);
+        rewardedP = null; preloadRewarded();
+        if (ok) onReward(); else if (onFail) onFail();
+      };
+      (async () => {
+        try {
+          await listen(handles, 'onRewardedVideoAdReward', () => { earned = true; });
+          await listen(handles, 'onRewardedVideoAdDismissed', () => finish(earned));
+          await listen(handles, 'onRewardedVideoAdFailedToShow', () => finish(false));
+          preloadRewarded();
+          if (!(await within(rewardedP, 8000))) { finish(false); return; }
+          const r = await AdMob.showRewardVideoAd();
+          if (r) earned = true;
+        } catch (e) { finish(false); }
+      })();
+    },
+
+    // Shown at natural breaks only. Never blocks the game: if no ad is ready, onDone() runs straight away.
+    showInterstitial(onDone) {
+      if (!AdMob) { if (onDone) onDone(); return; }
+      const handles = [];
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true; release(handles);
+        interstitialP = null; preloadInterstitial();
+        if (onDone) onDone();
+      };
+      (async () => {
+        try {
+          await listen(handles, 'interstitialAdDismissed', finish);
+          await listen(handles, 'interstitialAdFailedToShow', finish);
+          preloadInterstitial();
+          if (!(await within(interstitialP, 4000))) { finish(); return; }
+          await AdMob.showInterstitial();
+        } catch (e) { finish(); }
+      })();
+    }
+  };
+})();
+
+/* ============ QUESTIONS ============ */
+const QUESTIONS=[
+["What is the capital city of Zambia?",["Lusaka","Ndola","Livingstone","Kabwe"],0],
+["Who was Zambia's first president?",["Frederick Chiluba","Kenneth Kaunda","Levy Mwanawasa","Michael Sata"],1],
+["In which year did Zambia gain independence?",["1960","1962","1964","1968"],2],
+["What was Zambia called before independence?",["Southern Rhodesia","Nyasaland","Tanganyika","Northern Rhodesia"],3],
+["What is Zambia's currency?",["Kwacha","Rand","Shilling","Pula"],0],
+["What does 'Kwacha' mean?",["Gold","Dawn","Freedom","Money"],1],
+["What is the local name of Victoria Falls?",["Kalambo","Ngonye","Mosi-oa-Tunya","Chishimba"],2],
+["Which river forms the border between Zambia and Zimbabwe?",["Kafue","Luangwa","Congo","Zambezi"],3],
+["What is the nickname of the Zambia national football team?",["Chipolopolo","Super Eagles","Bafana Bafana","Black Stars"],0],
+["In which year did Zambia win the Africa Cup of Nations?",["2008","2012","2015","2019"],1],
+["Which mineral is Zambia's biggest export?",["Gold","Diamonds","Copper","Coal"],2],
+["Ndola is a major city in which province?",["Central","Luapula","Northern","Copperbelt"],3],
+["How many provinces does Zambia have?",["10","9","8","12"],0],
+["How many countries border Zambia?",["6","8","10","5"],1],
+["On which date is Zambia's Independence Day?",["1 January","12 March","24 October","4 July"],2],
+["Which bird is on the Zambian flag?",["Crowned crane","Fish eagle","Hornbill","Ostrich"],1],
+["Which city is Zambia's tourist capital?",["Kitwe","Chipata","Mongu","Livingstone"],3],
+["Which is the largest national park in Zambia?",["Kafue","South Luangwa","Lower Zambezi","Liuwa Plain"],0],
+["Which railway links Zambia to Dar es Salaam in Tanzania?",["Benguela","TAZARA","Beira","Nacala"],1],
+["Which lake on the Zambezi is shared with Zimbabwe?",["Lake Mweru","Lake Bangweulu","Lake Kariba","Lake Tanganyika"],2],
+["Kabompo is in which province?",["Western","North-Western","Eastern","Southern"],1],
+["Who captained Zambia to the 2012 AFCON title?",["Christopher Katongo","Rainford Kalaba","Stoppila Sunzu","Emmanuel Mayuka"],0],
+["Which port on Lake Tanganyika is in Zambia?",["Kigoma","Mpulungu","Kalemie","Ujiji"],1],
+["What is Zambia's official language?",["Bemba","Nyanja","English","Tonga"],2],
+["Which lake lies wholly inside Zambia?",["Lake Mweru","Lake Malawi","Lake Tanganyika","Lake Bangweulu"],3],
+["Which Zambian city is the capital of Eastern Province?",["Chipata","Kasama","Solwezi","Mansa"],0]
+];
+
+/* ============ GAME STATE ============ */
+const $=id=>document.getElementById(id);
+let score,lives,order,idx,timeLeft,tick,locked,answered,usedContinue,runId;
+const TIME=15;
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
+function best(){try{return +localStorage.getItem('zqBest')||0}catch(e){return 0}}
+function saveBest(v){try{localStorage.setItem('zqBest',v)}catch(e){}}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function start(){
+  score=0;lives=3;idx=0;answered=0;usedContinue=false;runId=Date.now();saveName();
+  order=shuffle(QUESTIONS.map((_,i)=>i));
+  show('game');next();
+}
+function hud(){$('score').textContent=score;$('lives').textContent='❤️'.repeat(Math.max(lives,0))||'💔';}
+function next(){
+  if(idx>=order.length){order=shuffle(QUESTIONS.map((_,i)=>i));idx=0;}
+  const [q,opts,ans]=QUESTIONS[order[idx]];
+  const pairs=shuffle(opts.map((t,i)=>({t,c:i===ans})));
+  $('question').textContent=q;
+  const box=$('options');box.innerHTML='';locked=false;
+  pairs.forEach(p=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=p.t;
+    b.onclick=()=>choose(b,p.c,box);
+    box.appendChild(b);
+  });
+  hud();startTimer();
+}
+function startTimer(){
+  clearInterval(tick);timeLeft=TIME;$('timer').style.width='100%';
+  tick=setInterval(()=>{
+    timeLeft-=0.1;$('timer').style.width=(timeLeft/TIME*100)+'%';
+    if(timeLeft<=0){clearInterval(tick);resolve(false,null,$('options'));}
+  },100);
+}
+function choose(btn,correct,box){
+  if(locked)return;clearInterval(tick);
+  resolve(correct,btn,box);
+}
+function resolve(correct,btn,box){
+  if(locked)return;locked=true;
+  [...box.children].forEach(b=>{ /* reveal correct answer */
+    const isRight=QUESTIONS[order[idx]][1][QUESTIONS[order[idx]][2]]===b.textContent;
+    if(isRight)b.classList.add('correct');
+  });
+  if(correct){score+=10;}else{lives--;if(btn)btn.classList.add('wrong');}
+  hud();idx++;answered++;
+  setTimeout(()=>{
+    if(lives<=0){gameOver();return;}
+    next();
+  },900);
+}
+function gameOver(){
+  $('finalScore').textContent=score;
+  const b=best();
+  if(score>b){saveBest(score);$('newBest').textContent='🎉 New best score!';}
+  else $('newBest').textContent='Best: '+b;
+  $('continueBtn').style.display=usedContinue||!AdBridge.native?'none':'block'; /* no ads on the web, so no continue */
+  $('best').textContent=best();
+  $('rank').textContent='';
+  Leaderboard.submit(getName()||'Player',score,runId)
+    .then(()=>Leaderboard.top())
+    .then(l=>{
+      const pos=l.findIndex(e=>String(e.id)===String(runId));
+      $('rank').textContent=pos>=0?'Leaderboard rank: #'+(pos+1):'';
+    });
+  show('over');
+}
+
+$('playBtn').onclick=start;
+let gamesPlayed=0;
+$('againBtn').onclick=()=>{
+  gamesPlayed++;
+  /* interstitial only at a natural break, on every 2nd "Play again" */
+  if(gamesPlayed%2===0){AdBridge.showInterstitial(start);}else{start();}
+};
+$('continueBtn').onclick=()=>{
+  $('adMsg').textContent='';
+  AdBridge.showRewarded(
+    ()=>{usedContinue=true;lives=1;show('game');next();},
+    ()=>{$('adMsg').textContent='No ad available right now. Please try again in a moment.';}
+  );
+};
+$('shareBtn').onclick=()=>{
+  const text=`I scored ${score} on Zambia Quiz Challenge 🇿🇲 Can you beat me?`;
+  /* on the web, add the game's link so friends can tap it and play straight away */
+  const url=AdBridge.native?'':location.origin+location.pathname.replace(/index\.html$/,'');
+  if(navigator.share){navigator.share(url?{text,url}:{text}).catch(()=>{});}
+  else window.open('https://wa.me/?text='+encodeURIComponent(url?text+' '+url:text),'_blank');
+};
+/* ============ LEADERBOARD ============
+   Global when FIREBASE_DB_URL is set (see firebase-setup.md); otherwise saves on this phone. */
+const FIREBASE_DB_URL='';  // e.g. 'https://your-project-default-rtdb.firebaseio.com' (no trailing slash)
+const Leaderboard={
+  KEY:'zqBoard',
+  online(){return !!FIREBASE_DB_URL;},
+  load(){try{return JSON.parse(localStorage.getItem(this.KEY))||[]}catch(e){return []}},
+  save(l){try{localStorage.setItem(this.KEY,JSON.stringify(l))}catch(e){}},
+  saveLocal(name,score,id){
+    if(score<=0)return;
+    const l=this.load();
+    const i=l.findIndex(e=>e.id===id);
+    if(i>=0){l[i].score=Math.max(l[i].score,score);}
+    else l.push({id,name,score,date:Date.now()});
+    l.sort((a,b)=>b.score-a.score||a.date-b.date);
+    this.save(l.slice(0,10));
+  },
+  async submit(name,score,id){
+    if(score<=0)return;
+    this.saveLocal(name,score,id);
+    if(!this.online())return;
+    try{
+      await withTimeout(fetch(FIREBASE_DB_URL+'/scores/r'+id+'.json',{
+        method:'PUT',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name,score,date:Date.now()})}));
+    }catch(e){}
+  },
+  async top(){
+    if(!this.online())return this.load();
+    try{
+      const r=await withTimeout(fetch(FIREBASE_DB_URL+'/scores.json?orderBy=%22score%22&limitToLast=10'));
+      const o=await r.json();
+      if(!o||o.error)return this.load();
+      return Object.entries(o)
+        .map(([k,v])=>({id:k.slice(1),name:String(v.name||'Player'),score:+v.score||0,date:v.date||0}))
+        .sort((a,b)=>b.score-a.score||a.date-b.date).slice(0,10);
+    }catch(e){return this.load();}
+  }
+};
+function withTimeout(p,ms=6000){
+  return Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms))]);
+}
+function getName(){try{return localStorage.getItem('zqName')||''}catch(e){return ''}}
+function saveName(){
+  const n=($('nameInput').value||'').trim().slice(0,12)||'Player';
+  try{localStorage.setItem('zqName',n)}catch(e){}
+  return n;
+}
+async function renderBoard(){
+  const box=$('boardList');
+  box.innerHTML='<p class="muted" style="text-align:center">Loading…</p>';
+  $('boardNote').textContent=Leaderboard.online()?'🌍 Global leaderboard':'📱 Scores on this phone';
+  const l=await Leaderboard.top();
+  box.innerHTML='';
+  if(!l.length){
+    const p=document.createElement('p');p.className='muted';p.style.textAlign='center';
+    p.textContent='No scores yet. Be the first!';box.appendChild(p);return;
+  }
+  l.forEach((e,i)=>{
+    const r=document.createElement('div');r.className='row'+(String(e.id)===String(runId)?' me':'');
+    const a=document.createElement('span');a.textContent=(['🥇','🥈','🥉'][i]||(i+1)+'.')+' '+e.name;
+    const b=document.createElement('b');b.textContent=e.score;
+    r.append(a,b);box.appendChild(r);
+  });
+}
+$('nameInput').value=getName();
+if(AdBridge.native){document.body.classList.add('native');}
+AdBridge.init();
+$('boardBtn').onclick=()=>{renderBoard();show('board');};
+$('boardBtn2').onclick=()=>{renderBoard();show('board');};
+$('backBtn').onclick=()=>show('home');
+$('best').textContent=best();
+
+/* ============ WEB APP (PWA) ============
+   On the web, sw.js keeps a copy of the game on the phone so it opens without data,
+   and players can install the game like an app. Not used inside the Android app. */
+if(!AdBridge.native){
+  if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  let installPrompt=null;
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').style.display='block';});
+  addEventListener('appinstalled',()=>{$('installBtn').style.display='none';});
+  $('installBtn').onclick=()=>{
+    if(!installPrompt)return;
+    installPrompt.prompt();
+    installPrompt=null;$('installBtn').style.display='none';
+  };
+  /* iPhones have no install button, it's done from the Share menu */
+  const installed=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  if(!installed&&/iphone|ipad|ipod/i.test(navigator.userAgent))$('iosHint').style.display='block';
+}
+</script>
+</body>
+</html>
