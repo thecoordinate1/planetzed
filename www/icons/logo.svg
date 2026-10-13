@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>PlanetZed</title>
+  <defs>
+    <linearGradient id="pz-planet" x1="0.2" y1="0.1" x2="0.85" y2="0.95">
+      <stop offset="0" stop-color="#FFD54F"/>
+      <stop offset="0.55" stop-color="#FF8A3D"/>
+      <stop offset="1" stop-color="#EE4B37"/>
+    </linearGradient>
+    <clipPath id="pz-ball"><circle cx="256" cy="256" r="150"/></clipPath>
+    <clipPath id="pz-front"><rect x="0" y="256" width="512" height="256"/></clipPath>
+  </defs>
+  <!-- ring, back half (behind the planet) -->
+  <g transform="rotate(-18 256 256)">
+    <ellipse cx="256" cy="256" rx="232" ry="66" fill="none" stroke="#1FA862" stroke-width="22"/>
+  </g>
+  <!-- planet with kitenge-style bands -->
+  <circle cx="256" cy="256" r="150" fill="url(#pz-planet)"/>
+  <g clip-path="url(#pz-ball)" opacity="0.22">
+    <rect x="80" y="352" width="360" height="16" fill="#7A1E12"/>
+    <rect x="80" y="380" width="360" height="9" fill="#7A1E12"/>
+    <rect x="80" y="134" width="360" height="9" fill="#FFF3C4"/>
+  </g>
+  <!-- the Z -->
+  <path d="M206 170 H306 L206 282 H306" fill="none" stroke="#FFFFFF" stroke-width="36" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- ring, front half (in front of the planet) -->
+  <g transform="rotate(-18 256 256)">
+    <ellipse cx="256" cy="256" rx="232" ry="66" fill="none" stroke="#2FD17A" stroke-width="22" clip-path="url(#pz-front)"/>
+  </g>
+  <!-- sparkle -->
+  <path d="M96 92 L104 116 L128 124 L104 132 L96 156 L88 132 L64 124 L88 116 Z" fill="#FFC23D"/>
+</svg>

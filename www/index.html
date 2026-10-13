@@ -2,104 +2,547 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Zambia Quiz Challenge</title>
-<meta name="description" content="How well do you know Zambia? A quick quiz game with a leaderboard.">
-<meta name="theme-color" content="#0f1a12">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PlanetZed: the Africa quiz</title>
+<meta name="description" content="How well do you know Africa? Daily challenge, 7 categories, English &amp; French. · Connais-tu bien l'Afrique ?">
+<meta name="theme-color" content="#0b0820">
+<meta name="color-scheme" content="dark">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Zambia Quiz">
+<meta name="apple-mobile-web-app-title" content="PlanetZed">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!-- Link previews (WhatsApp, Facebook, X) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PlanetZed">
+<meta property="og:title" content="PlanetZed: the Africa quiz">
+<meta property="og:description" content="How well do you know Africa? Daily challenge, 7 categories, English &amp; French. · Connais-tu bien l'Afrique ?">
+<meta property="og:url" content="https://thecoordinate1.github.io/planetzed/">
+<meta property="og:image" content="https://thecoordinate1.github.io/planetzed/icons/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="PlanetZed: the Africa quiz">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PlanetZed: the Africa quiz">
+<meta name="twitter:description" content="How well do you know Africa? Daily challenge, 7 categories, English &amp; French. · Connais-tu bien l'Afrique ?">
+<meta name="twitter:image" content="https://thecoordinate1.github.io/planetzed/icons/og-image.jpg">
 <style>
-  :root{--green:#198a00;--orange:#ef7d00;--red:#de2010;--black:#111;--bg:#0f1a12;--card:#1b2b20;--text:#f4f4f0}
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-  #app{max-width:480px;margin:0 auto;height:100%;display:flex;flex-direction:column;padding:16px}
-  .screen{display:none;flex:1;flex-direction:column}
-  .screen.active{display:flex}
-  h1{font-size:2rem;margin:8px 0;text-align:center}
-  .stripe{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--green) 25%,var(--red) 25% 50%,var(--black) 50% 75%,var(--orange) 75%);margin:6px 0 18px}
-  .center{margin:auto;text-align:center;width:100%}
-  button{font:inherit;border:0;border-radius:14px;padding:16px;width:100%;margin:8px 0;cursor:pointer;color:var(--text);background:var(--card);font-size:1.05rem;text-align:left}
-  button.primary{background:var(--green);text-align:center;font-weight:700;font-size:1.2rem}
-  button.reward{background:var(--orange);color:#111;text-align:center;font-weight:700}
-  button.ghost{background:transparent;border:2px solid var(--card);text-align:center}
-  button:active{transform:scale(.98)}
-  .hud{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
-  .bar{height:8px;background:var(--card);border-radius:4px;overflow:hidden;margin-bottom:16px}
-  .bar>i{display:block;height:100%;width:100%;background:var(--orange);transition:width .1s linear}
-  .q{font-size:1.3rem;font-weight:700;margin:8px 0 16px;line-height:1.35}
-  .opt.correct{background:var(--green)}
-  .opt.wrong{background:var(--red)}
-  .big{font-size:4rem;font-weight:800;color:var(--orange)}
-  .muted{opacity:.7}
-  input{font:inherit;width:100%;padding:14px;border-radius:14px;border:2px solid var(--card);background:var(--card);color:var(--text);margin:8px 0;text-align:center}
-  .row{display:flex;justify-content:space-between;padding:12px 14px;border-radius:12px;background:var(--card);margin:6px 0}
-  .row.me{outline:2px solid var(--orange)}
-  #boardList{overflow:auto;flex:1}
-  /* inside the Android app the real AdMob banner overlays the bottom, so keep this as empty space. The web version has no ads. */
-  #banner{display:none}
-  .native #banner{display:block;height:64px;margin-top:8px}
+/* ============ THEME ============ */
+:root{
+  --bg:#0b0820;--bg2:#140f2e;--card:#1A1535;--card2:#231c47;--line:#2B2552;--well:#110d28;
+  --text:#F7F4FF;--muted:#A9A3C9;--ink:#1b1238;
+  --gold:#FFC23D;--orange:#FF8A3D;--coral:#FF4F5E;--green:#2FD17A;--teal:#22C3C3;--purple:#9B6BFF;--pink:#FF5FA2;
+  /* kente/kitenge-style band, used sparingly */
+  --kente:repeating-linear-gradient(90deg,#FFC23D 0 16px,#2FD17A 16px 22px,#FF4F5E 22px 34px,#0b0820 34px 37px,#FF8A3D 37px 50px,#9B6BFF 50px 56px,#0b0820 56px 59px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--text);overflow-x:hidden;
+  font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Ubuntu,Arial,sans-serif}
+/* night sky: star specks + warm planet glow, painted once on a fixed layer */
+#sky{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(1.6px 1.6px at 23px 41px,rgba(255,255,255,0.9) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1px 1px at 151px 12px,rgba(255,255,255,0.5) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1.3px 1.3px at 288px 77px,rgba(255,255,255,0.7) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1.1px 1.1px at 370px 190px,rgba(255,255,255,0.55) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1.4px 1.4px at 97px 213px,rgba(255,255,255,0.8) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1px 1px at 215px 301px,rgba(255,255,255,0.5) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1.7px 1.7px at 330px 352px,rgba(255,255,255,0.85) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1.1px 1.1px at 54px 380px,rgba(255,255,255,0.6) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1.2px 1.2px at 190px 140px,rgba(255,217,160,0.65) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(1px 1px at 260px 236px,rgba(255,255,255,0.45) 50%,transparent 51%) 0 0/397px 419px,
+  radial-gradient(circle at 92% -6%,rgba(255,138,61,.42),rgba(255,79,94,.14) 24%,transparent 44%),
+  radial-gradient(circle at -8% 104%,rgba(155,107,255,.3),transparent 46%),
+  linear-gradient(180deg,var(--bg),var(--bg2))}
+h1,h2,h3{margin:0;font-weight:900;line-height:1.15;letter-spacing:-.01em}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+
+/* ============ LAYOUT ============ */
+#app{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.screen{display:none;flex:1;flex-direction:column;gap:12px;padding:12px 16px 20px}
+.screen.on{display:flex;animation:in .28s ease-out}
+#banner{display:none}
+.native #banner{display:block;height:64px;flex:none} /* the AdMob banner covers this space in the Android app */
+
+/* ============ BUTTONS & COMMON ============ */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;padding:12px 18px;
+  border-radius:16px;font-weight:800;font-size:1.05rem;line-height:1.2;text-align:center;background:var(--card2);
+  border:1px solid var(--line);box-shadow:0 4px 0 #0d0a22;transition:transform .08s}
+.btn:active{transform:translateY(3px)}
+.btn.primary{background:var(--gold);color:var(--ink);border-color:#ffd77a;box-shadow:0 4px 0 #b9831a}
+.btn.pink{background:var(--pink);color:#2a0717;border-color:#ff9cc6;box-shadow:0 4px 0 #a8326a}
+.btn.green{background:var(--green);color:#052313;border-color:#7bf0b0;box-shadow:0 4px 0 #17864a}
+.btn.ghost{background:transparent;box-shadow:none}
+.btn.danger{background:var(--coral);color:#2b0509;border-color:#ff9aa3;box-shadow:0 4px 0 #a92b38}
+.btn.small{min-height:48px;font-size:.95rem;padding:8px 14px;width:auto}
+.ibtn{flex:none;width:48px;height:48px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-size:1.25rem;background:var(--card);border:1px solid var(--line);transition:transform .08s}
+.ibtn:active,.tile:active{transform:scale(.94)}
+.card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px}
+.chip{flex:1;min-width:0;display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:14px;background:var(--well);border:1px solid var(--line)}
+.chip .e{font-size:1.2rem}
+.chip b{display:block;font-weight:900;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip small,.lbl{display:block;color:var(--muted);font-size:.72rem;font-weight:700;line-height:1.2}
+.bar{height:8px;border-radius:8px;background:var(--well);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--orange));transform-origin:0 50%;transform:scaleX(0);transition:transform .7s ease-out}
+.grid10{display:flex;flex-wrap:wrap;gap:5px}
+.grid10 i{width:22px;height:22px;border-radius:6px;background:#3a3462}
+.grid10 i.g{background:var(--green)}
+.grid10 i.r{background:var(--coral)}
+
+/* ============ ONBOARDING ============ */
+#onboard{justify-content:center;gap:14px}
+.hero{text-align:center}
+.hero img{width:116px;height:116px;animation:pop .6s ease-out}
+.hero h1{font-size:2.5rem;margin-top:4px}
+.wm b{color:var(--gold)}
+.hero p{color:var(--muted);font-weight:700;margin-top:4px}
+.hero .tag{color:var(--text);font-size:1.15rem;font-weight:800}
+.field label{display:block;font-weight:800;font-size:.9rem;color:var(--muted);margin:0 0 6px 2px}
+input,select{font:inherit;font-weight:700;width:100%;min-height:52px;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);background:var(--well);color:var(--text)}
+input:focus,select:focus{border-color:var(--gold);outline:none}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:16px;background:var(--well);border:1px solid var(--line)}
+.seg button{min-height:48px;border-radius:12px;font-weight:800;padding:4px}
+.seg button[aria-pressed="true"],.seg button[aria-selected="true"]{background:var(--gold);color:var(--ink)}
+.kente{height:6px;border-radius:6px;background:var(--kente)}
+
+/* ============ HOME ============ */
+.topbar{display:flex;align-items:center;justify-content:space-between;min-height:52px}
+.brand{display:flex;align-items:center;gap:8px;font-size:1.65rem;font-weight:900;letter-spacing:-.02em}
+.brand img{width:42px;height:42px}
+.player{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:center}
+.avatar{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.1rem;
+  background:var(--card2);box-shadow:0 0 0 3px var(--gold),0 0 0 7px rgba(255,194,61,.16)}
+.pinfo{min-width:0}
+.pname{font-weight:900;font-size:1.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptitle{color:var(--gold);font-weight:800;font-size:.9rem;margin-bottom:6px}
+.xptext{color:var(--muted);font-size:.75rem;font-weight:700;margin-top:3px}
+.chips{grid-column:1/-1;display:flex;gap:8px}
+.chcard{border-color:var(--pink);background:linear-gradient(135deg,rgba(255,95,162,.2),rgba(155,107,255,.12) 60%),var(--card)}
+.chrow{display:flex;gap:12px;align-items:center;padding-right:30px}
+.chrow .fl{font-size:2.3rem;line-height:1}
+.chrow b{display:block;font-size:1.08rem;overflow-wrap:anywhere}
+.chrow small{display:block;color:var(--muted);font-weight:700;font-size:.85rem}
+.chcard .btn{margin-top:12px}
+.xbtn{position:absolute;top:4px;right:4px;width:48px;height:48px;border-radius:50%;color:var(--muted);font-size:1.1rem}
+.daily{padding-top:20px;border-color:#4b3d1f;background:radial-gradient(circle at 100% 0,rgba(255,194,61,.16),transparent 55%),var(--card)}
+.daily::before{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:var(--kente)}
+.dhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dhead h2{font-size:1.25rem}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--gold);color:var(--ink);font-weight:900;font-size:.85rem}
+.dsub{color:var(--muted);font-weight:700;font-size:.88rem;margin:4px 0 12px}
+#dGrid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:12px 0 4px}
+#dGrid i{width:auto;height:24px}
+.drow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.drow .grow{flex:1;min-width:150px}
+.dres{font-weight:900;margin-top:8px}
+.dnext{color:var(--muted);font-size:.85rem;font-weight:700;margin-top:2px}
+.quick{display:flex;align-items:center;gap:14px;width:100%;min-height:86px;padding:14px 18px;border-radius:22px;text-align:left;
+  color:var(--ink);background:linear-gradient(115deg,var(--gold),var(--orange) 72%,#ff6a4a);
+  box-shadow:0 6px 0 #a9521f,0 14px 30px rgba(255,138,61,.22);transition:transform .08s}
+.quick:active{transform:translateY(4px)}
+.quick .e{font-size:2.3rem;line-height:1}
+.quick b{display:block;font-size:1.45rem;font-weight:900;line-height:1.1}
+.quick small{display:block;font-weight:800;font-size:.88rem;opacity:.85}
+.quick .go{margin-left:auto;font-size:1.5rem;font-weight:900}
+.sec{font-size:1.05rem;font-weight:900;margin:4px 2px -2px}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{--c:var(--teal);--c2:rgba(34,195,195,.18);display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:116px;
+  padding:13px;border-radius:20px;text-align:left;background:linear-gradient(150deg,var(--c2),transparent 62%),var(--card);
+  border:1px solid var(--line);border-bottom:4px solid var(--c);transition:transform .08s}
+.tile .e{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:var(--c2)}
+.tile b{font-size:1rem;font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+.tile small{margin-top:auto;color:var(--muted);font-weight:800;font-size:.8rem}
+.c-geo{--c:#22C3C3;--c2:rgba(34,195,195,.18)}.c-cap{--c:#9B6BFF;--c2:rgba(155,107,255,.22)}
+.c-his{--c:#FFC23D;--c2:rgba(255,194,61,.18)}.c-spo{--c:#2FD17A;--c2:rgba(47,209,122,.18)}
+.c-cul{--c:#FF5FA2;--c2:rgba(255,95,162,.18)}.c-nat{--c:#FF8A3D;--c2:rgba(255,138,61,.2)}
+.c-pack{--c:#2FD17A;--c2:rgba(47,209,122,.18)}.c-all{--c:#FFC23D;--c2:rgba(255,194,61,.18)}
+.tile.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:12px;min-height:76px}
+.tile.wide small{margin:0 0 0 auto;text-align:right}
+.hint{text-align:center;color:var(--muted);font-weight:700;font-size:.9rem}
+
+/* ============ GAME ============ */
+#game{gap:10px;padding-top:8px}
+.gtop{display:flex;align-items:center;gap:10px}
+.catchip{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 14px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);border-bottom:3px solid var(--c);font-weight:800;font-size:.95rem}
+.catchip span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.langbtn{font-size:.85rem;font-weight:900}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:36px}
+.lives{font-size:1.3rem;letter-spacing:1px;white-space:nowrap}
+.lives .lost{opacity:.22}
+.prog{font-weight:900;color:var(--muted)}
+.combo{padding:4px 12px;border-radius:999px;background:linear-gradient(90deg,var(--orange),var(--coral));color:#2a0a05;font-weight:900;font-size:.9rem;animation:pop .3s;white-space:nowrap}
+.score{font-weight:900;font-size:1.4rem;color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap}
+.timer{display:flex;align-items:center;gap:10px}
+.tbar{flex:1;height:12px;border-radius:12px;background:var(--well);border:1px solid var(--line);overflow:hidden}
+.tbar i{display:block;height:100%;transform-origin:0 50%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:12px;will-change:transform}
+.tbar.low i{background:linear-gradient(90deg,var(--orange),var(--coral))}
+.secs{min-width:30px;text-align:right;font-weight:900;font-variant-numeric:tabular-nums}
+.secs.low{color:var(--coral)}
+.qcard{--c:var(--teal);position:relative;display:flex;flex-direction:column;flex:1 0 auto;min-height:118px;max-height:290px;padding:12px 16px 16px;
+  border-radius:20px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--c);transition:opacity .15s}
+.qmeta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.qcard::after{content:attr(data-e);position:absolute;right:12px;bottom:8px;font-size:72px;line-height:1;opacity:.08;pointer-events:none}
+.qtext{position:relative;z-index:1;margin:auto 0;font-size:1.28rem;font-weight:800;line-height:1.3}
+.qtext.long{font-size:1.12rem}
+@media (min-height:780px){.qtext{font-size:1.42rem}.qtext.long{font-size:1.22rem}}
+.qnote{position:absolute;right:12px;bottom:-14px;padding:4px 12px;border-radius:999px;background:var(--coral);color:#2b0509;font-weight:900;font-size:.85rem;animation:pop .3s}
+.opts{display:flex;flex-direction:column;gap:9px;transition:opacity .15s}
+.opt{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px 8px 8px;border-radius:16px;text-align:left;
+  background:var(--card2);border:1px solid var(--line);box-shadow:0 3px 0 #0d0a22;font-weight:700;font-size:1.05rem;line-height:1.2;
+  transition:transform .08s,opacity .2s}
+.opt:active{transform:translateY(2px)}
+.opt .k{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;background:#30286a;color:var(--gold)}
+.opt .k+span{min-width:0;overflow-wrap:anywhere}
+.opt.ok{background:var(--green);color:#052313;border-color:#7bf0b0;animation:pop2 .35s}
+.opt.ok .k,.opt.bad .k{background:rgba(0,0,0,.28);color:#fff}
+.opt.bad{background:var(--coral);color:#2b0509;border-color:#ff9aa3;animation:shake .4s}
+.opt.dim{opacity:.45}
+.opt.gone{opacity:.12;pointer-events:none}
+.paused .qcard,.paused .opts{opacity:0}
+.lifes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:auto;padding-top:4px}
+.life{display:flex;align-items:center;justify-content:center;gap:6px;min-height:50px;padding:4px 6px;border-radius:14px;
+  background:var(--card);border:1px solid var(--line);font-weight:800;font-size:.95rem;line-height:1.1;transition:transform .08s,opacity .2s}
+.life:active{transform:scale(.95)}
+.life:disabled{opacity:.3}
+.opt{position:relative}
+.float{position:absolute;right:14px;top:-14px;font-weight:900;font-size:1.6rem;color:var(--gold);pointer-events:none;
+  text-shadow:0 2px 0 #1b1238,0 0 8px rgba(11,8,32,.9);animation:float .95s ease-out forwards}
+
+/* ============ RESULTS ============ */
+#results{text-align:center}
+.remoji{font-size:3.2rem;line-height:1;animation:pop .5s ease-out}
+.rtitle{font-size:1.7rem;margin-top:6px}
+.rsub{color:var(--muted);font-weight:800;margin-top:2px}
+.rscore{font-size:4rem;font-weight:900;color:var(--gold);line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 0 28px rgba(255,194,61,.35)}
+.rscore small{display:block;font-size:.85rem;color:var(--muted);text-shadow:none;margin-top:6px;text-transform:uppercase;letter-spacing:.1em}
+.badge{align-self:center;padding:6px 16px;border-radius:999px;background:var(--pink);color:#2a0717;font-weight:900;animation:pop .45s}
+.rch{padding:12px 14px;border-radius:18px;font-weight:900;font-size:1.1rem;border:1px solid var(--line);background:var(--card)}
+.rch small{display:block;color:var(--muted);font-weight:800;font-size:.85rem;margin-top:2px}
+.rch.win{border-color:var(--green);background:linear-gradient(135deg,rgba(47,209,122,.2),transparent 70%),var(--card)}
+.rch.lose{border-color:var(--coral);background:linear-gradient(135deg,rgba(255,79,94,.16),transparent 70%),var(--card)}
+#rGrid{justify-content:center}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 6px}
+.stat b{display:block;font-size:1.3rem;font-weight:900;font-variant-numeric:tabular-nums}
+.stat small{display:block;color:var(--muted);font-size:.72rem;font-weight:700;line-height:1.2;margin-top:2px}
+.xpbox{text-align:left;padding:12px 14px}
+.xprow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800;margin-bottom:8px}
+.xprow b{color:var(--gold)}
+.lvlup{color:var(--green);font-weight:900}
+.rnote{color:var(--muted);font-weight:800}
+.actions{display:flex;flex-direction:column;gap:10px;margin-top:auto;padding-top:6px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row2.single{grid-template-columns:1fr}
+
+/* ============ LEADERBOARD ============ */
+.btop{display:flex;align-items:center;gap:10px}
+.btop h1{flex:1;text-align:center;font-size:1.45rem}
+.btop::after{content:"";width:48px;flex:none}
+.rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.lrow{display:flex;align-items:center;gap:10px;min-height:58px;padding:8px 14px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.lrow .rk{width:32px;flex:none;text-align:center;font-weight:900;color:var(--muted);font-size:1.05rem}
+.lrow .fl{font-size:1.4rem;flex:none}
+.lrow .nm{flex:1;min-width:0;font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+.lrow .sc{font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.lrow.top{background:linear-gradient(90deg,rgba(255,194,61,.1),transparent 60%),var(--card)}
+.lrow.me{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.bnote{text-align:center;color:var(--muted);font-weight:700;font-size:.9rem}
+
+/* ============ SHEETS, TOAST, CONFETTI ============ */
+#scrim{position:fixed;top:0;left:0;right:0;bottom:0;z-index:20;background:rgba(5,3,16,.74);animation:fade .2s}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-width:480px;max-height:90vh;margin:0 auto;overflow-y:auto;
+  padding:10px 18px calc(18px + env(safe-area-inset-bottom));background:var(--card);border:1px solid var(--line);border-bottom:0;
+  border-radius:26px 26px 0 0;animation:up .26s ease-out}
+.sheet::before{content:"";display:block;width:44px;height:5px;border-radius:5px;background:var(--line);margin:0 auto 14px}
+.sheet h2{font-size:1.4rem;margin-bottom:6px}
+.sheet .field{margin:14px 0}
+.sheet h3{font-size:1.05rem;margin:18px 0 10px}
+.trow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;border-bottom:1px solid var(--line);font-weight:800}
+.switch{position:relative;flex:none;width:64px;height:48px}
+.switch::before{content:"";position:absolute;left:3px;top:7px;width:58px;height:34px;border-radius:34px;background:#3a3462;transition:background .2s}
+.switch::after{content:"";position:absolute;left:7px;top:11px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .2s}
+.switch[aria-checked="true"]::before{background:var(--green)}
+.switch[aria-checked="true"]::after{transform:translateX(24px)}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sgrid .chip{flex-direction:column;align-items:flex-start;gap:2px}
+.sgrid .chip:last-child{grid-column:1/-1}
+.about{text-align:center;color:var(--muted);font-size:.85rem;font-weight:700;margin:18px 0 14px}
+.qsheet{text-align:center}
+.qsheet p{color:var(--muted);font-weight:700;margin:4px 0 18px}
+.qsheet .btn+.btn{margin-top:12px}
+#toast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top));z-index:30;max-width:92vw;padding:10px 18px;border-radius:999px;
+  background:var(--gold);color:var(--ink);font-weight:900;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.45);
+  transform:translate(-50%,-160%);transition:transform .3s ease-out;pointer-events:none}
+#toast.on{transform:translate(-50%,0)}
+.confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:40}
+
+/* ============ ANIMATIONS ============ */
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes pop2{50%{transform:scale(1.03)}}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+@keyframes float{0%{opacity:0;transform:translateY(10px) scale(.8)}20%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-40px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{transform:translateY(100%)}}
+
+/* ============ SMALL SCREENS & MOTION ============ */
+@media (max-height:640px){
+  #game{gap:8px;padding-bottom:10px}
+  .hud{min-height:30px}
+  .qcard{min-height:0;padding:10px 14px 14px}
+  .qtext{font-size:1.12rem}.qtext.long{font-size:1rem}
+  .opts{gap:7px}
+  .opt{min-height:48px;font-size:.98rem}.opt .k{width:34px;height:34px}
+  .life{min-height:48px}
+  .rscore{font-size:3.3rem}.remoji{font-size:2.6rem}
+  #onboard{gap:10px}
+  .hero img{width:72px;height:72px}
+  .hero h1{font-size:2rem}
+  .hero p{font-size:.9rem}
+}
+@media (max-width:350px){
+  .screen{padding-left:12px;padding-right:12px}
+  .brand{font-size:1.45rem}
+  .tile{min-height:108px;padding:11px}
+  .quick b{font-size:1.25rem}
+  .chip{padding:6px 8px}
+  .opt{font-size:.98rem}
+  .lives{font-size:1.1rem;letter-spacing:0}
+  .score{font-size:1.2rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="stripe"></div>
+<div id="sky" aria-hidden="true"></div>
+<!-- Text in elements with data-t comes from strings.js (data-ta="attribute:key" for attributes). -->
+<main id="app">
+
+  <!-- ONBOARDING (first visit) -->
+  <section id="onboard" class="screen" aria-labelledby="obTitle">
+    <div class="hero">
+      <img class="logo" src="icons/logo.svg" alt="PlanetZed" width="116" height="116">
+      <h1 id="obTitle" class="wm">Planet<b>Zed</b></h1>
+      <p class="tag" data-t="tagline"></p>
+      <p data-t="obIntro"></p>
+    </div>
+    <div class="kente" aria-hidden="true"></div>
+    <div class="field">
+      <label id="obLangLbl" data-t="language"></label>
+      <div class="seg" id="obLang" role="group" aria-labelledby="obLangLbl">
+        <button type="button" data-lang="en" lang="en">English</button>
+        <button type="button" data-lang="fr" lang="fr">Français</button>
+      </div>
+    </div>
+    <div class="field">
+      <label for="obName" data-t="yourName"></label>
+      <input id="obName" maxlength="12" autocomplete="nickname" enterkeyhint="done">
+    </div>
+    <div class="field">
+      <label for="obCountry" data-t="yourCountry"></label>
+      <select id="obCountry"></select>
+    </div>
+    <button type="button" class="btn primary" id="obStart" data-t="start"></button>
+  </section>
 
   <!-- HOME -->
-  <section id="home" class="screen active">
-    <div class="center">
-      <div style="font-size:4rem">🇿🇲</div>
-      <h1>Zambia Quiz Challenge</h1>
-      <p class="muted">How well do you know Zambia?</p>
-      <p>Best score: <b id="best">0</b></p>
-      <input id="nameInput" maxlength="12" placeholder="Enter your name" autocomplete="off">
-      <button class="primary" id="playBtn">Play</button>
-      <button class="ghost" id="boardBtn">🏆 Leaderboard</button>
-      <button class="ghost" id="installBtn" style="display:none">📲 Install the app</button>
-      <p id="iosHint" class="muted" style="display:none">To install: tap Share, then "Add to Home Screen"</p>
+  <section id="home" class="screen">
+    <header class="topbar">
+      <div class="brand"><img class="logo" src="icons/logo.svg" alt="" width="42" height="42"><span class="wm">Planet<b>Zed</b></span></div>
+      <button type="button" class="ibtn" id="btnSettings" data-ta="aria-label:settings">⚙️</button>
+    </header>
+
+    <div class="card player">
+      <div class="avatar" id="pFlag" aria-hidden="true">🌍</div>
+      <div class="pinfo">
+        <div class="pname" id="pName"></div>
+        <div class="ptitle" id="pTitle"></div>
+        <div class="bar"><i id="pXpBar"></i></div>
+        <div class="xptext num" id="pXp"></div>
+      </div>
+      <div class="chips">
+        <div class="chip"><span class="e" aria-hidden="true">🔥</span><div><b id="pStreak"></b><small data-t="streakLabel"></small></div></div>
+        <div class="chip"><span class="e" aria-hidden="true">🏆</span><div><b class="num" id="pBest"></b><small data-t="bestLabel"></small></div></div>
+      </div>
     </div>
+
+    <div class="card chcard" id="chCard" hidden>
+      <button type="button" class="xbtn" id="chDismiss" data-ta="aria-label:dismiss">✕</button>
+      <div class="chrow">
+        <span class="fl" id="chFlag" aria-hidden="true"></span>
+        <div><b id="chTitle"></b><small id="chInfo"></small></div>
+      </div>
+      <button type="button" class="btn pink" id="chAccept"><span aria-hidden="true">⚔️</span><span data-t="accept"></span></button>
+    </div>
+
+    <div class="card daily" id="dailyCard">
+      <div class="dhead"><span aria-hidden="true">📅</span><h2 data-t="daily"></h2><span class="pill num" id="dNo"></span></div>
+      <div id="dTodo">
+        <p class="dsub" data-t="dailySub"></p>
+        <button type="button" class="btn primary" id="dPlay"><span aria-hidden="true">▶</span><span data-t="play"></span></button>
+      </div>
+      <div id="dDone" hidden>
+        <div class="grid10" id="dGrid" aria-hidden="true"></div>
+        <div class="drow">
+          <div class="grow">
+            <p class="dres num" id="dRes"></p>
+            <p class="dnext num" id="dNext"></p>
+          </div>
+          <button type="button" class="btn primary small" id="dShare"><span aria-hidden="true">📤</span><span data-t="share"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="quick" id="btnQuick">
+      <span class="e" aria-hidden="true">⚡</span>
+      <span><b data-t="quick"></b><small id="quickSub"></small></span>
+      <span class="go" aria-hidden="true">›</span>
+    </button>
+
+    <h2 class="sec" data-t="cats"></h2>
+    <div class="cats" id="catGrid"></div>
+
+    <button type="button" class="btn" id="btnBoard"><span aria-hidden="true">🏆</span><span data-t="board"></span></button>
+    <button type="button" class="btn ghost" id="installBtn" hidden><span aria-hidden="true">📲</span><span data-t="install"></span></button>
+    <p class="hint" id="iosHint" data-t="iosHint" hidden></p>
   </section>
 
   <!-- GAME -->
   <section id="game" class="screen">
-    <div class="hud"><span>Score: <span id="score">0</span></span><span id="lives">❤️❤️❤️</span></div>
-    <div class="bar"><i id="timer"></i></div>
-    <div class="q" id="question"></div>
-    <div id="options"></div>
+    <div class="gtop">
+      <button type="button" class="ibtn" id="btnQuit" data-ta="aria-label:quit">✕</button>
+      <div class="catchip" id="gCat"><span id="gCatE" aria-hidden="true"></span><span id="gCatN"></span></div>
+      <button type="button" class="ibtn langbtn" id="btnLang" data-t="langShort" data-ta="aria-label:switchLang"></button>
+    </div>
+    <div class="hud">
+      <span class="lives" id="gLives" role="img"></span>
+      <span class="prog num" id="gProg" hidden></span>
+      <span class="combo" id="gCombo" hidden></span>
+      <span class="score" id="gScore" aria-live="polite"></span>
+    </div>
+    <div class="timer" aria-hidden="true"><div class="tbar" id="gTbar"><i id="gBar"></i></div><span class="secs" id="gSecs">20</span></div>
+    <div class="qcard" id="gCard">
+      <div class="qmeta"><span id="gNum"></span><span id="gDiff"></span></div>
+      <div class="qtext" id="gQ" aria-live="polite"></div>
+    </div>
+    <div class="opts" id="gOpts">
+      <button type="button" class="opt"><span class="k">A</span><span></span></button>
+      <button type="button" class="opt"><span class="k">B</span><span></span></button>
+      <button type="button" class="opt"><span class="k">C</span><span></span></button>
+      <button type="button" class="opt"><span class="k">D</span><span></span></button>
+    </div>
+    <div class="lifes" id="gLifes">
+      <button type="button" class="life" id="l50"><span aria-hidden="true">✂️</span><span data-t="l50"></span></button>
+      <button type="button" class="life" id="lTime"><span aria-hidden="true">⏱️</span><span data-t="lTime"></span></button>
+      <button type="button" class="life" id="lSkip"><span aria-hidden="true">⏭️</span><span data-t="lSkip"></span></button>
+    </div>
   </section>
 
-  <!-- GAME OVER -->
-  <section id="over" class="screen">
-    <div class="center">
-      <h1>Game Over</h1>
-      <div class="big" id="finalScore">0</div>
-      <p class="muted" id="newBest"></p>
-      <p id="rank" style="font-weight:700;color:var(--orange)"></p>
-      <p id="adMsg" class="muted"></p>
-      <button class="reward" id="continueBtn">▶ Watch an ad to continue (+1 life)</button>
-      <button class="primary" id="againBtn">Play again</button>
-      <button class="ghost" id="shareBtn">Share my score</button>
-      <button class="ghost" id="boardBtn2">🏆 Leaderboard</button>
+  <!-- RESULTS (classic and daily) -->
+  <section id="results" class="screen">
+    <div>
+      <div class="remoji" id="rEmoji" aria-hidden="true">🏁</div>
+      <h1 class="rtitle" id="rTitle"></h1>
+      <p class="rsub" id="rSub"></p>
+    </div>
+    <div class="rch" id="rCh" hidden></div>
+    <div class="rscore"><span id="rScore">0</span><small data-t="pts"></small></div>
+    <div class="badge" id="rBadge" data-t="newBest" hidden></div>
+    <div class="grid10" id="rGrid" aria-hidden="true" hidden></div>
+    <div class="stats3" id="rStats"></div>
+    <div class="card xpbox">
+      <div class="xprow"><span id="rLevel"></span><b class="num" id="rXp"></b></div>
+      <div class="bar"><i id="rXpBar"></i></div>
+      <p class="lvlup" id="rLvlUp" hidden></p>
+    </div>
+    <p class="rnote num" id="rNote"></p>
+    <p class="rnote" id="adMsg" role="status"></p>
+    <div class="actions">
+      <button type="button" class="btn green" id="continueBtn" hidden><span aria-hidden="true">▶</span><span data-t="continueAd"></span></button>
+      <button type="button" class="btn primary" id="againBtn"><span aria-hidden="true">🔄</span><span data-t="again"></span></button>
+      <button type="button" class="btn pink" id="challengeBtn"><span aria-hidden="true">⚔️</span><span id="challengeLbl"></span></button>
+      <div class="row2">
+        <button type="button" class="btn" id="shareBtn"><span aria-hidden="true">📤</span><span id="shareLbl"></span></button>
+        <button type="button" class="btn" id="homeBtn"><span aria-hidden="true">🏠</span><span data-t="home"></span></button>
+      </div>
     </div>
   </section>
 
   <!-- LEADERBOARD -->
   <section id="board" class="screen">
-    <h1>🏆 Top 10</h1>
-    <p id="boardNote" class="muted" style="text-align:center;margin:0 0 8px"></p>
-    <div id="boardList"></div>
-    <button class="primary" id="backBtn">Back</button>
+    <div class="btop">
+      <button type="button" class="ibtn" id="boardBack" data-ta="aria-label:back">←</button>
+      <h1 data-t="board"></h1>
+    </div>
+    <div class="seg" id="boardTabs" role="tablist" hidden>
+      <button type="button" role="tab" data-tab="all" id="tabAll"></button>
+      <button type="button" role="tab" data-tab="cc" id="tabCc"></button>
+    </div>
+    <p class="bnote" id="boardNote"></p>
+    <ol class="rows" id="boardList"></ol>
   </section>
 
   <div id="banner"></div>
+</main>
+
+<!-- MODAL SHEETS -->
+<div id="scrim" hidden></div>
+
+<div class="sheet" id="sheetSettings" role="dialog" aria-modal="true" aria-labelledby="setTitle" hidden>
+  <h2 id="setTitle" data-t="settings"></h2>
+  <div class="field">
+    <label id="setLangLbl" data-t="language"></label>
+    <div class="seg" id="setLang" role="group" aria-labelledby="setLangLbl">
+      <button type="button" data-lang="en" lang="en">English</button>
+      <button type="button" data-lang="fr" lang="fr">Français</button>
+    </div>
+  </div>
+  <div class="trow"><span id="setSoundLbl"><span aria-hidden="true">🔊 </span><span data-t="sound"></span></span>
+    <button type="button" class="switch" id="setSound" role="switch" aria-labelledby="setSoundLbl"></button></div>
+  <div class="trow"><span id="setVibLbl"><span aria-hidden="true">📳 </span><span data-t="vibration"></span></span>
+    <button type="button" class="switch" id="setVib" role="switch" aria-labelledby="setVibLbl"></button></div>
+  <div class="field">
+    <label for="setName" data-t="yourName"></label>
+    <input id="setName" maxlength="12" autocomplete="nickname" enterkeyhint="done">
+  </div>
+  <div class="field">
+    <label for="setCountry" data-t="yourCountry"></label>
+    <select id="setCountry"></select>
+  </div>
+  <h3 data-t="stats"></h3>
+  <div class="sgrid" id="setStats"></div>
+  <p class="about" data-t="about"></p>
+  <button type="button" class="btn primary" id="setDone" data-t="done"></button>
 </div>
 
+<div class="sheet qsheet" id="sheetQuit" role="alertdialog" aria-modal="true" aria-labelledby="quitTitle" hidden>
+  <h2 id="quitTitle" data-t="quitTitle"></h2>
+  <p id="quitText"></p>
+  <button type="button" class="btn primary" id="quitNo" data-t="quitNo"></button>
+  <button type="button" class="btn danger" id="quitYes" data-t="quitYes"></button>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="strings.js"></script>
+<script src="questions.js"></script>
 <script src="ads-config.js"></script>
 <script>
+'use strict';
 /* ============ AD BRIDGE ============
    Inside the Android app (Capacitor) these call Google AdMob. Ad unit IDs come from ads-config.js,
    generated from admob.config.json. The web version (PWA) has no ads. */
@@ -186,217 +629,1058 @@ const AdBridge = (() => {
   };
 })();
 
-/* ============ QUESTIONS ============ */
-const QUESTIONS=[
-["What is the capital city of Zambia?",["Lusaka","Ndola","Livingstone","Kabwe"],0],
-["Who was Zambia's first president?",["Frederick Chiluba","Kenneth Kaunda","Levy Mwanawasa","Michael Sata"],1],
-["In which year did Zambia gain independence?",["1960","1962","1964","1968"],2],
-["What was Zambia called before independence?",["Southern Rhodesia","Nyasaland","Tanganyika","Northern Rhodesia"],3],
-["What is Zambia's currency?",["Kwacha","Rand","Shilling","Pula"],0],
-["What does 'Kwacha' mean?",["Gold","Dawn","Freedom","Money"],1],
-["What is the local name of Victoria Falls?",["Kalambo","Ngonye","Mosi-oa-Tunya","Chishimba"],2],
-["Which river forms the border between Zambia and Zimbabwe?",["Kafue","Luangwa","Congo","Zambezi"],3],
-["What is the nickname of the Zambia national football team?",["Chipolopolo","Super Eagles","Bafana Bafana","Black Stars"],0],
-["In which year did Zambia win the Africa Cup of Nations?",["2008","2012","2015","2019"],1],
-["Which mineral is Zambia's biggest export?",["Gold","Diamonds","Copper","Coal"],2],
-["Ndola is a major city in which province?",["Central","Luapula","Northern","Copperbelt"],3],
-["How many provinces does Zambia have?",["10","9","8","12"],0],
-["How many countries border Zambia?",["6","8","10","5"],1],
-["On which date is Zambia's Independence Day?",["1 January","12 March","24 October","4 July"],2],
-["Which bird is on the Zambian flag?",["Crowned crane","Fish eagle","Hornbill","Ostrich"],1],
-["Which city is Zambia's tourist capital?",["Kitwe","Chipata","Mongu","Livingstone"],3],
-["Which is the largest national park in Zambia?",["Kafue","South Luangwa","Lower Zambezi","Liuwa Plain"],0],
-["Which railway links Zambia to Dar es Salaam in Tanzania?",["Benguela","TAZARA","Beira","Nacala"],1],
-["Which lake on the Zambezi is shared with Zimbabwe?",["Lake Mweru","Lake Bangweulu","Lake Kariba","Lake Tanganyika"],2],
-["Kabompo is in which province?",["Western","North-Western","Eastern","Southern"],1],
-["Who captained Zambia to the 2012 AFCON title?",["Christopher Katongo","Rainford Kalaba","Stoppila Sunzu","Emmanuel Mayuka"],0],
-["Which port on Lake Tanganyika is in Zambia?",["Kigoma","Mpulungu","Kalemie","Ujiji"],1],
-["What is Zambia's official language?",["Bemba","Nyanja","English","Tonga"],2],
-["Which lake lies wholly inside Zambia?",["Lake Mweru","Lake Malawi","Lake Tanganyika","Lake Bangweulu"],3],
-["Which Zambian city is the capital of Eastern Province?",["Chipata","Kasama","Solwezi","Mansa"],0]
-];
+/* ============ SETTINGS YOU MAY CHANGE ============ */
+const WEB_URL = 'https://thecoordinate1.github.io/planetzed/'; // game link used in shares from the Android app
+const FIREBASE_DB_URL = '';  // online leaderboard, e.g. 'https://your-project-default-rtdb.firebaseio.com' (no trailing slash)
+const TIME = 20;             // seconds per question
+const LIVES = 3;
+const DAILY_START = Date.UTC(2026, 9, 13); // Daily Challenge #1 = 13 Oct 2026, 00:00 UTC
+const DAY_MS = 86400000;
+const PAN = ['geo', 'cap', 'his', 'spo', 'cul', 'nat'];   // the six pan-African categories
+const CAT_EMOJI = { geo: '🗺️', cap: '🏛️', his: '📜', spo: '⚽', cul: '🥁', nat: '🦁', all: '⚡' };
+const TITLES = [[20, 't20'], [16, 't16'], [12, 't12'], [8, 't8'], [5, 't5'], [3, 't3'], [1, 't1']]; // [from level, string key]
 
-/* ============ GAME STATE ============ */
-const $=id=>document.getElementById(id);
-let score,lives,order,idx,timeLeft,tick,locked,answered,usedContinue,runId;
-const TIME=15;
-
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
-function best(){try{return +localStorage.getItem('zqBest')||0}catch(e){return 0}}
-function saveBest(v){try{localStorage.setItem('zqBest',v)}catch(e){}}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-
-function start(){
-  score=0;lives=3;idx=0;answered=0;usedContinue=false;runId=Date.now();saveName();
-  order=shuffle(QUESTIONS.map((_,i)=>i));
-  show('game');next();
+/* ============ SMALL HELPERS ============ */
+const $ = id => document.getElementById(id);
+const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const nat = v => (typeof v === 'number' && isFinite(v) && v > 0) ? Math.floor(v) : 0; // whole number >= 0
+const pad2 = n => (n < 10 ? '0' : '') + n;
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
 }
-function hud(){$('score').textContent=score;$('lives').textContent='❤️'.repeat(Math.max(lives,0))||'💔';}
-function next(){
-  if(idx>=order.length){order=shuffle(QUESTIONS.map((_,i)=>i));idx=0;}
-  const [q,opts,ans]=QUESTIONS[order[idx]];
-  const pairs=shuffle(opts.map((t,i)=>({t,c:i===ans})));
-  $('question').textContent=q;
-  const box=$('options');box.innerHTML='';locked=false;
-  pairs.forEach(p=>{
-    const b=document.createElement('button');b.className='opt';b.textContent=p.t;
-    b.onclick=()=>choose(b,p.c,box);
-    box.appendChild(b);
+function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); return node; }
+function withTimeout(p, ms = 6000) {
+  return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+}
+
+/* ============ HASHING & SEEDED RANDOM ============ */
+// FNV-1a: a question's identity is the hash of its English text, so file order never matters.
+function fnv1a(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return h >>> 0;
+}
+// mulberry32: the same seed always gives the same numbers, so a seed reproduces a whole game.
+function mulberry32(a) {
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffle(arr, rnd) {
+  for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); const x = arr[i]; arr[i] = arr[j]; arr[j] = x; }
+  return arr;
+}
+const newSeed = () => Math.floor(Math.random() * 4294967296) >>> 0;
+
+/* ============ COUNTRIES ============ */
+const COUNTRIES = Array.isArray(window.PZ_COUNTRIES) ? window.PZ_COUNTRIES : [];
+const CC = {};
+COUNTRIES.forEach(c => { if (Array.isArray(c) && c[0]) CC[c[0]] = c; });
+const validCc = cc => (typeof cc === 'string' && CC[cc]) ? cc : '';
+// Flag emoji from the 2-letter code (regional indicator letters); 🌍 for "other".
+const flag = cc => validCc(cc) ? String.fromCodePoint(0x1F1A5 + cc.charCodeAt(0), 0x1F1A5 + cc.charCodeAt(1)) : '🌍';
+function countryName(cc) {
+  const c = CC[cc] || COUNTRIES.find(x => x[0] === '') || ['', 'Other', 'Autre'];
+  return S.lang === 'fr' ? c[2] : c[1];
+}
+
+/* ============ SAVED STATE ============
+   Everything lives in one localStorage key. Every access is wrapped in try/catch
+   (private browsing can block storage), and loaded values are checked before use. */
+const KEY = 'pz.state';
+const S = loadState();
+function loadState() {
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+  if (!s || typeof s !== 'object') s = {};
+  const obj = v => (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
+  const st = obj(s.stats), sk = obj(s.streak), b = obj(s.bests), bests = {};
+  Object.keys(b).forEach(k => { if (/^[a-z]{2,3}$/.test(k)) bests[k] = nat(b[k]); });
+  return {
+    onboarded: !!s.onboarded,
+    name: cleanName(s.name),
+    cc: validCc(s.cc),
+    lang: s.lang === 'fr' || s.lang === 'en' ? s.lang : '',
+    sound: s.sound !== false,
+    vib: s.vib !== false,
+    xp: nat(s.xp),
+    stats: { games: nat(st.games), answers: nat(st.answers), correct: nat(st.correct), best: nat(st.best), combo: nat(st.combo), dailies: nat(st.dailies) },
+    bests,
+    streak: { cur: nat(sk.cur), best: nat(sk.best), last: nat(sk.last) },
+    daily: s.daily && typeof s.daily === 'object' ? {
+      day: nat(s.daily.day), n: nat(s.daily.n), score: nat(s.daily.score), correct: nat(s.daily.correct),
+      res: typeof s.daily.res === 'string' ? s.daily.res.replace(/[^grw]/g, '').slice(0, 20) : '', done: !!s.daily.done
+    } : null,
+    ch: s.ch ? cleanChallenge(s.ch) : null,
+    board: Array.isArray(s.board) ? s.board.map(cleanEntry).filter(Boolean).slice(0, 10) : []
+  };
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+// Names: no control or text-direction characters, at most 12 characters.
+function cleanName(n) {
+  return Array.from(String(n == null ? '' : n).replace(/[\u0000-\u001f\u007f-\u009f‎‏‪-‮⁦-⁩]/g, '').trim())
+    .slice(0, 12).join('').trim();
+}
+const myName = () => S.name || t('defaultName');
+
+/* ============ TEXT (strings.js) ============ */
+const STR = window.PZ_STRINGS || { en: {}, fr: {} };
+// t('key', {vars}): English fallback, {placeholders}, singular forms (key_1) and French typography.
+function t(key, vars) {
+  const L = S.lang === 'fr' ? 'fr' : 'en', dict = STR[L] || {}, en = STR.en || {};
+  let k = key;
+  if (vars && typeof vars.n === 'number' && (L === 'fr' ? vars.n < 2 : vars.n === 1) && dict[key + '_1'] != null) k = key + '_1';
+  let s = dict[k] != null ? dict[k] : en[k] != null ? en[k] : key;
+  if (vars) s = String(s).replace(/\{(\w+)\}/g, (m, v) => vars[v] != null ? String(vars[v]) : m);
+  return L === 'fr' ? frTypo(s) : String(s);
+}
+// French typography: non-breaking space before ? ! : ; and inside « », with or without a space in the text.
+function frTypo(s) {
+  return String(s)
+    .replace(/«[   ]?/g, '« ')
+    .replace(/[   ]?»/g, ' »')
+    .replace(/[  ]([?!:;])/g, ' $1')
+    .replace(/([^\s?!«(])([?!])(?=\s|$)/g, '$1 $2');
+}
+const tx = s => S.lang === 'fr' ? frTypo(s) : String(s); // for question text from questions.js
+const NF = {};
+const fmt = n => (NF[S.lang] = NF[S.lang] || new Intl.NumberFormat(S.lang === 'fr' ? 'fr' : 'en')).format(n);
+
+/* ============ QUESTIONS ============
+   Loaded from questions.js: [category, difficulty, [EN question, correct, wrong x3], [FR ...]].
+   Bad rows are skipped, so a typo in the file never breaks the game. */
+const QS = [];
+(function () {
+  const seen = {};
+  const five = a => Array.isArray(a) && a.length === 5 && a.every(x => typeof x === 'string' && x.trim());
+  (Array.isArray(window.PZ_QUESTIONS) ? window.PZ_QUESTIONS : []).forEach(r => {
+    if (!Array.isArray(r) || typeof r[0] !== 'string' || !/^[a-z]{2,3}$/.test(r[0]) || !five(r[2])) return;
+    const id = fnv1a(r[2][0]).toString(36);
+    if (seen[id]) return;
+    seen[id] = 1;
+    QS.push({ id, cat: r[0], d: r[1] === 1 || r[1] === 3 ? r[1] : 2, en: r[2], fr: five(r[3]) ? r[3] : r[2] });
   });
-  hud();startTimer();
+  QS.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0); // stable order, whatever the file order
+})();
+const BY_CAT = {};
+QS.forEach(q => { (BY_CAT[q.cat] = BY_CAT[q.cat] || []).push(q); });
+// Country packs: categories named after a country code (zm = Zambia, ng = Nigeria...).
+const PACKS = Object.keys(BY_CAT).filter(c => PAN.indexOf(c) < 0 && CC[c.toUpperCase()]).sort();
+const isCat = c => c === 'all' ? PAN.some(p => BY_CAT[p]) : !!BY_CAT[c] && (PAN.indexOf(c) >= 0 || PACKS.indexOf(c) >= 0);
+const catName = c => c === 'all' ? t('quick') : PAN.indexOf(c) >= 0 ? t('cat_' + c) : countryName(c.toUpperCase());
+const catEmoji = c => CAT_EMOJI[c] || flag(c.toUpperCase());
+const catClass = c => 'c-' + (CAT_EMOJI[c] ? c : 'pack');
+// Questions for a game. Quick Play ('all') = the six pan-African categories + the player's own country pack.
+function poolFor(cat, cc) {
+  if (cat !== 'all') return BY_CAT[cat] || [];
+  const own = (cc || '').toLowerCase();
+  return QS.filter(q => PAN.indexOf(q.cat) >= 0 || (own && q.cat === own));
 }
-function startTimer(){
-  clearInterval(tick);timeLeft=TIME;$('timer').style.width='100%';
-  tick=setInterval(()=>{
-    timeLeft-=0.1;$('timer').style.width=(timeLeft/TIME*100)+'%';
-    if(timeLeft<=0){clearInterval(tick);resolve(false,null,$('options'));}
-  },100);
+
+/* ============ LEVELS ============ */
+const xpFor = L => 50 * L * (L - 1); // total XP needed for level L
+function levelOf(xp) { let L = 1; while (xpFor(L + 1) <= xp) L++; return L; }
+function titleOf(L) { for (const [min, k] of TITLES) if (L >= min) return t(k); return t('t1'); }
+
+/* ============ SOUND & VIBRATION ============
+   Tiny synthesized sounds (no audio files). The AudioContext is created on the first tap. */
+let actx = null;
+function unlockAudio() {
+  if (actx) { if (actx.state === 'suspended') actx.resume().catch(() => {}); return; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (AC) { try { actx = new AC(); } catch (e) {} }
 }
-function choose(btn,correct,box){
-  if(locked)return;clearInterval(tick);
-  resolve(correct,btn,box);
+addEventListener('pointerdown', unlockAudio, { passive: true });
+addEventListener('touchend', unlockAudio, { passive: true });
+addEventListener('click', unlockAudio);
+addEventListener('keydown', unlockAudio);
+function tone(freq, dur, type, vol, at, toFreq) {
+  const c = actx, t0 = c.currentTime + (at || 0), o = c.createOscillator(), g = c.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, t0);
+  if (toFreq) o.frequency.exponentialRampToValueAtTime(toFreq, t0 + dur);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0 + 0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(t0); o.stop(t0 + dur + 0.05);
 }
-function resolve(correct,btn,box){
-  if(locked)return;locked=true;
-  [...box.children].forEach(b=>{ /* reveal correct answer */
-    const isRight=QUESTIONS[order[idx]][1][QUESTIONS[order[idx]][2]]===b.textContent;
-    if(isRight)b.classList.add('correct');
-  });
-  if(correct){score+=10;}else{lives--;if(btn)btn.classList.add('wrong');}
-  hud();idx++;answered++;
-  setTimeout(()=>{
-    if(lives<=0){gameOver();return;}
-    next();
-  },900);
+const SOUNDS = {
+  tap: () => tone(520, 0.06, 'triangle', 0.06),
+  correct: () => { tone(660, 0.1, 'triangle', 0.14); tone(990, 0.18, 'triangle', 0.14, 0.08); },
+  wrong: () => tone(220, 0.32, 'sawtooth', 0.07, 0, 110),
+  tick: () => tone(1150, 0.04, 'square', 0.03),
+  level: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.18, 'triangle', 0.12, i * 0.09)),
+  over: () => [392, 330, 262].forEach((f, i) => tone(f, 0.24, 'triangle', 0.12, i * 0.16)),
+  daily: () => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, 0.16, 'triangle', 0.11, i * 0.1))
+};
+function sfx(name) { if (S.sound && actx && SOUNDS[name]) { try { SOUNDS[name](); } catch (e) {} } }
+function buzz(pattern) { if (S.vib && navigator.vibrate) { try { navigator.vibrate(pattern); } catch (e) {} } }
+
+/* ============ TOAST & CONFETTI ============ */
+let toastTimer = 0;
+function toast(msg) {
+  const box = $('toast');
+  box.textContent = msg;
+  box.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => box.classList.remove('on'), 2600);
 }
-function gameOver(){
-  $('finalScore').textContent=score;
-  const b=best();
-  if(score>b){saveBest(score);$('newBest').textContent='🎉 New best score!';}
-  else $('newBest').textContent='Best: '+b;
-  $('continueBtn').style.display=usedContinue||!AdBridge.native?'none':'block'; /* no ads on the web, so no continue */
-  $('best').textContent=best();
-  $('rank').textContent='';
-  Leaderboard.submit(getName()||'Player',score,runId)
-    .then(()=>Leaderboard.top())
-    .then(l=>{
-      const pos=l.findIndex(e=>String(e.id)===String(runId));
-      $('rank').textContent=pos>=0?'Leaderboard rank: #'+(pos+1):'';
+// Light confetti: at most 70 pieces for 1.4 s, none when the player prefers reduced motion.
+function confetti() {
+  if (RM) return;
+  const c = el('canvas', 'confetti'), w = c.width = innerWidth, h = c.height = innerHeight, g = c.getContext('2d');
+  if (!g) return;
+  document.body.appendChild(c);
+  const cols = ['#FFC23D', '#FF8A3D', '#FF4F5E', '#2FD17A', '#22C3C3', '#9B6BFF', '#FF5FA2'], P = [];
+  for (let i = 0; i < 70; i++) {
+    P.push({ x: w / 2 + (Math.random() - 0.5) * w * 0.4, y: h * 0.32, vx: (Math.random() - 0.5) * 10, vy: -4 - Math.random() * 9, s: 5 + Math.random() * 6, c: cols[i % 7], r: Math.random() * 6 });
+  }
+  const t0 = performance.now();
+  (function frame(now) {
+    const k = (now - t0) / 1400;
+    g.clearRect(0, 0, w, h);
+    if (k >= 1) { c.remove(); return; }
+    g.globalAlpha = Math.min(1, (1 - k) * 2.5);
+    P.forEach(p => {
+      p.vy += 0.36; p.x += p.vx; p.y += p.vy; p.r += 0.18;
+      g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.c; g.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); g.restore();
     });
-  show('over');
+    requestAnimationFrame(frame);
+  })(t0);
 }
 
-$('playBtn').onclick=start;
-let gamesPlayed=0;
-$('againBtn').onclick=()=>{
-  gamesPlayed++;
-  /* interstitial only at a natural break, on every 2nd "Play again" */
-  if(gamesPlayed%2===0){AdBridge.showInterstitial(start);}else{start();}
-};
-$('continueBtn').onclick=()=>{
-  $('adMsg').textContent='';
-  AdBridge.showRewarded(
-    ()=>{usedContinue=true;lives=1;show('game');next();},
-    ()=>{$('adMsg').textContent='No ad available right now. Please try again in a moment.';}
-  );
-};
-$('shareBtn').onclick=()=>{
-  const text=`I scored ${score} on Zambia Quiz Challenge 🇿🇲 Can you beat me?`;
-  /* on the web, add the game's link so friends can tap it and play straight away */
-  const url=AdBridge.native?'':location.origin+location.pathname.replace(/index\.html$/,'');
-  if(navigator.share){navigator.share(url?{text,url}:{text}).catch(()=>{});}
-  else window.open('https://wa.me/?text='+encodeURIComponent(url?text+' '+url:text),'_blank');
-};
-/* ============ LEADERBOARD ============
-   Global when FIREBASE_DB_URL is set (see firebase-setup.md); otherwise saves on this phone. */
-const FIREBASE_DB_URL='';  // e.g. 'https://your-project-default-rtdb.firebaseio.com' (no trailing slash)
-const Leaderboard={
-  KEY:'zqBoard',
-  online(){return !!FIREBASE_DB_URL;},
-  load(){try{return JSON.parse(localStorage.getItem(this.KEY))||[]}catch(e){return []}},
-  save(l){try{localStorage.setItem(this.KEY,JSON.stringify(l))}catch(e){}},
-  saveLocal(name,score,id){
-    if(score<=0)return;
-    const l=this.load();
-    const i=l.findIndex(e=>e.id===id);
-    if(i>=0){l[i].score=Math.max(l[i].score,score);}
-    else l.push({id,name,score,date:Date.now()});
-    l.sort((a,b)=>b.score-a.score||a.date-b.date);
-    this.save(l.slice(0,10));
-  },
-  async submit(name,score,id){
-    if(score<=0)return;
-    this.saveLocal(name,score,id);
-    if(!this.online())return;
-    try{
-      await withTimeout(fetch(FIREBASE_DB_URL+'/scores/r'+id+'.json',{
-        method:'PUT',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name,score,date:Date.now()})}));
-    }catch(e){}
-  },
-  async top(){
-    if(!this.online())return this.load();
-    try{
-      const r=await withTimeout(fetch(FIREBASE_DB_URL+'/scores.json?orderBy=%22score%22&limitToLast=10'));
-      const o=await r.json();
-      if(!o||o.error)return this.load();
-      return Object.entries(o)
-        .map(([k,v])=>({id:k.slice(1),name:String(v.name||'Player'),score:+v.score||0,date:v.date||0}))
-        .sort((a,b)=>b.score-a.score||a.date-b.date).slice(0,10);
-    }catch(e){return this.load();}
-  }
-};
-function withTimeout(p,ms=6000){
-  return Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms))]);
+/* ============ DAYS (Daily Challenge clock, UTC) ============ */
+const dayIndex = () => Math.floor((Date.now() - DAILY_START) / DAY_MS);
+const today = () => Math.max(1, dayIndex() + 1);               // 13 Oct 2026 = #1
+const msToNextDay = () => DAILY_START + (dayIndex() + 1) * DAY_MS - Date.now();
+function clock(ms) {
+  const s = Math.max(0, Math.ceil(ms / 1000));
+  return pad2(Math.floor(s / 3600)) + ':' + pad2(Math.floor(s / 60) % 60) + ':' + pad2(s % 60);
 }
-function getName(){try{return localStorage.getItem('zqName')||''}catch(e){return ''}}
-function saveName(){
-  const n=($('nameInput').value||'').trim().slice(0,12)||'Player';
-  try{localStorage.setItem('zqName',n)}catch(e){}
-  return n;
+
+/* ============ SCREENS & BACK BUTTON ============
+   Home is the base history entry. Leaving home (or opening a sheet) pushes one extra entry,
+   so the Android back button closes a sheet, asks "Quit game?" during a game, or returns home. */
+let screen = '', sheet = null, trapped = false, skipPop = false;
+function show(id) {
+  const old = document.querySelector('.screen.on');
+  if (old) old.classList.remove('on');
+  $(id).classList.add('on');
+  screen = id;
+  scrollTo(0, 0);
+  if (id === 'home' || id === 'onboard') untrap(); else trap();
+  if (id === 'home') renderHome();
+  runClock();
 }
-async function renderBoard(){
-  const box=$('boardList');
-  box.innerHTML='<p class="muted" style="text-align:center">Loading…</p>';
-  $('boardNote').textContent=Leaderboard.online()?'🌍 Global leaderboard':'📱 Scores on this phone';
-  const l=await Leaderboard.top();
-  box.innerHTML='';
-  if(!l.length){
-    const p=document.createElement('p');p.className='muted';p.style.textAlign='center';
-    p.textContent='No scores yet. Be the first!';box.appendChild(p);return;
-  }
-  l.forEach((e,i)=>{
-    const r=document.createElement('div');r.className='row'+(String(e.id)===String(runId)?' me':'');
-    const a=document.createElement('span');a.textContent=(['🥇','🥈','🥉'][i]||(i+1)+'.')+' '+e.name;
-    const b=document.createElement('b');b.textContent=e.score;
-    r.append(a,b);box.appendChild(r);
+function trap() { if (!trapped) { try { history.pushState({ pz: 1 }, ''); trapped = true; } catch (e) {} } }
+function untrap() { if (trapped) { trapped = false; skipPop = true; history.back(); } }
+addEventListener('popstate', () => {
+  if (skipPop) { skipPop = false; return; }
+  trapped = false;
+  if (sheet) { closeSheet(true); if (screen !== 'home' && screen !== 'onboard') trap(); return; }
+  if (screen === 'game' && G.on) { trap(); askQuit(); return; }
+  if (screen !== 'home' && screen !== 'onboard') show('home');
+});
+
+/* ============ MODAL SHEETS ============ */
+function openSheet(id) {
+  if (sheet) closeSheet(true);
+  sheet = $(id);
+  sheet.hidden = false;
+  $('scrim').hidden = false;
+  trap();
+}
+function closeSheet(fromBack) {
+  if (!sheet) return;
+  const was = sheet.id;
+  sheet.hidden = true;
+  $('scrim').hidden = true;
+  sheet = null;
+  if (was === 'sheetQuit') resumeGame();
+  if (was === 'sheetSettings' && screen === 'home') renderHome();
+  if (!fromBack && (screen === 'home' || screen === 'onboard')) untrap();
+}
+$('scrim').addEventListener('click', () => closeSheet());
+
+/* ============ LANGUAGE ============ */
+// Fills every element marked data-t / data-ta with text in the current language.
+function applyText() {
+  document.documentElement.lang = S.lang || 'en';
+  document.querySelectorAll('[data-t]').forEach(e => { e.textContent = t(e.getAttribute('data-t')); });
+  document.querySelectorAll('[data-ta]').forEach(e => {
+    const p = e.getAttribute('data-ta').split(':');
+    e.setAttribute(p[0], t(p[1]));
+  });
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === (S.lang || 'en'))));
+  $('obName').placeholder = $('setName').placeholder = t('defaultName');
+  fillCountries($('obCountry'), $('obCountry').value || S.cc);
+  fillCountries($('setCountry'), S.cc);
+}
+// Switching language re-renders whatever is on screen (a question keeps its answer order).
+function setLang(L) {
+  if (L !== 'en' && L !== 'fr') return;
+  S.lang = L;
+  save();
+  applyText();
+  if (screen === 'home') renderHome();
+  if (screen === 'game') renderGame();
+  if (screen === 'results') renderResults();
+  if (screen === 'board') renderBoard();
+  if (sheet && sheet.id === 'sheetSettings') renderSettings();
+  if (sheet && sheet.id === 'sheetQuit') $('quitText').textContent = t(G.mode === 'daily' ? 'quitDaily' : 'quitText');
+}
+// Country list sorted by name in the current language; "Other" last.
+function fillCountries(sel, value) {
+  const L = S.lang === 'fr' ? 2 : 1;
+  const list = COUNTRIES.filter(c => c[0]).sort((a, b) => a[L].localeCompare(b[L], S.lang || 'en'));
+  COUNTRIES.filter(c => !c[0]).forEach(c => list.push(c));
+  clear(sel);
+  list.forEach(c => { const o = el('option', null, flag(c[0]) + '  ' + c[L]); o.value = c[0]; sel.appendChild(o); });
+  sel.value = validCc(value);
+}
+const guessLang = () => /^fr/i.test(navigator.language || '') ? 'fr' : 'en';
+function guessCc() {
+  const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+  for (const l of langs) { const m = /-([a-z]{2})$/i.exec(l || ''); if (m && CC[m[1].toUpperCase()]) return m[1].toUpperCase(); }
+  return '';
+}
+
+/* ============ ONBOARDING ============ */
+function showOnboarding() {
+  if (!S.lang) S.lang = guessLang();
+  $('obName').value = S.name;
+  fillCountries($('obCountry'), S.cc || guessCc());
+  applyText();
+  show('onboard');
+}
+$('obLang').addEventListener('click', e => { const b = e.target.closest('[data-lang]'); if (b) setLang(b.getAttribute('data-lang')); });
+$('obStart').addEventListener('click', () => {
+  S.name = cleanName($('obName').value);
+  S.cc = validCc($('obCountry').value);
+  S.onboarded = true;
+  save();
+  show('home');
+  runPending();
+});
+$('obName').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+
+/* ============ LINKS: ?play=daily|quick and friend challenges (#c=...) ============ */
+let pending = '';
+function readLinks() {
+  const p = /[?&]play=(daily|quick)\b/.exec(location.search);
+  if (p) pending = p[1];
+  const m = /^#c=([^&#]{1,160})$/.exec(location.hash || '');
+  if (p || location.hash) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
+  if (!m) return;
+  // <cat>.<seed base 36>.<score>.<name, URI-encoded>.<country code>.<pack country>
+  // <pack country> is whose country pack was in the game; after "Challenge back" it differs from the
+  // sender's country. Older links have no 6th part (the sender's country is used). Names never contain
+  // a raw dot (it is sent as %2E), but older links may: anything between score and country is the name.
+  const parts = m[1].split('.');
+  if (parts.length < 5 || !/^[0-9a-z]{1,7}$/.test(parts[1]) || !/^\d{1,7}$/.test(parts[2])) return;
+  const six = parts.length === 6 && /^[A-Za-z]{0,2}$/.test(parts[4]) && /^[A-Za-z]{0,2}$/.test(parts[5]);
+  let name = six ? parts[3] : parts.slice(3, -1).join('.');
+  try { name = decodeURIComponent(name); } catch (e) { name = ''; }
+  const cc = (six ? parts[4] : parts[parts.length - 1]).toUpperCase();
+  const ch = cleanChallenge({ cat: parts[0], seed: parseInt(parts[1], 36), score: +parts[2], name, cc, pack: six ? parts[5].toUpperCase() : cc });
+  if (ch && isCat(ch.cat)) { S.ch = ch; save(); }
+}
+// Checks a challenge (from a link or from storage); anything odd is dropped or clamped.
+function cleanChallenge(o) {
+  if (!o || typeof o !== 'object' || typeof o.cat !== 'string' || !/^(all|[a-z]{2,3})$/.test(o.cat)) return null;
+  const seed = nat(o.seed);
+  if (seed > 4294967295) return null;
+  const cc = validCc(o.cc);
+  return { cat: o.cat, seed, score: clamp(nat(o.score), 0, 9999999), name: cleanName(o.name), cc, pack: o.pack === undefined ? cc : validCc(o.pack) };
+}
+// A challenge link opened while the game is already open only changes the #hash.
+addEventListener('hashchange', () => {
+  if (!/^#c=/.test(location.hash)) return;
+  readLinks();
+  if (screen === 'home') renderHome();
+});
+function runPending() {
+  const p = pending;
+  pending = '';
+  if (p === 'quick') startClassic('all');
+  else if (p === 'daily' && !dailyDone()) startDaily();
+}
+
+/* ============ HOME ============ */
+const setBar = (i, r) => { i.style.transform = 'scaleX(' + clamp(r || 0, 0, 1) + ')'; };
+function renderHome() {
+  const L = levelOf(S.xp), lo = xpFor(L), hi = xpFor(L + 1);
+  $('pFlag').textContent = flag(S.cc);
+  $('pName').textContent = myName();
+  $('pTitle').textContent = t('levelTitle', { n: fmt(L), title: titleOf(L) });
+  $('pXp').textContent = t('xp', { xp: fmt(S.xp), next: fmt(hi) });
+  setBar($('pXpBar'), (S.xp - lo) / (hi - lo));
+  $('pStreak').textContent = t('days', { n: streakNow() });
+  $('pBest').textContent = fmt(S.stats.best);
+  $('quickSub').textContent = BY_CAT[S.cc.toLowerCase()] ? t('quickSubCc', { country: countryName(S.cc) }) : t('quickSub');
+  $('btnQuick').disabled = !isCat('all');
+  renderChallengeCard();
+  renderDaily();
+  renderCats();
+}
+// Category tiles: the six pan-African ones, then country packs (the player's own first).
+function renderCats() {
+  const grid = clear($('catGrid')), own = S.cc.toLowerCase();
+  const cats = PAN.filter(c => BY_CAT[c]).concat(PACKS.slice().sort((a, b) => (b === own) - (a === own)));
+  cats.forEach((c, i) => {
+    const b = el('button', 'tile ' + catClass(c)), e = el('span', 'e', catEmoji(c)), best = nat(S.bests[c]);
+    b.type = 'button';
+    e.setAttribute('aria-hidden', 'true');
+    if (cats.length % 2 && i === cats.length - 1) b.classList.add('wide'); // odd tile out spans the row
+    b.append(e, el('b', null, catName(c)), el('small', 'num', best ? t('best', { n: fmt(best) }) : t('notPlayed')));
+    b.addEventListener('click', () => startClassic(c));
+    grid.appendChild(b);
   });
 }
-$('nameInput').value=getName();
-if(AdBridge.native){document.body.classList.add('native');}
-AdBridge.init();
-$('boardBtn').onclick=()=>{renderBoard();show('board');};
-$('boardBtn2').onclick=()=>{renderBoard();show('board');};
-$('backBtn').onclick=()=>show('home');
-$('best').textContent=best();
+function renderChallengeCard() {
+  const c = S.ch && isCat(S.ch.cat) ? S.ch : null;
+  $('chCard').hidden = !c;
+  if (!c) return;
+  $('chFlag').textContent = flag(c.cc);
+  $('chTitle').textContent = t('chTitle', { name: c.name || t('defaultName') });
+  $('chInfo').textContent = t('chInfo', { score: fmt(c.score), cat: catName(c.cat) });
+}
+$('chAccept').addEventListener('click', () => { if (S.ch) startClassic(S.ch.cat, S.ch); });
+$('chDismiss').addEventListener('click', () => { S.ch = null; save(); renderHome(); });
+$('btnQuick').addEventListener('click', () => startClassic('all'));
+$('dPlay').addEventListener('click', () => startDaily());
+$('dShare').addEventListener('click', () => { const D = todayDaily(); if (D && D.done) share(dailyShareText(D), gameUrl() + '?play=daily'); });
+$('btnBoard').addEventListener('click', () => openBoard());
+$('btnSettings').addEventListener('click', () => openSettings());
+
+/* ============ DAILY CHALLENGE: selection & progress ============ */
+const dailyCache = {};
+// The day's questions, the same for everyone. Rendezvous hashing: each question scores
+// fnv1a(id + ':' + day); the lowest scores win in each tier (3 easy, 4 medium, 3 hard),
+// topped up from the other tiers if one is short. Adding or reordering questions barely changes a day.
+function dailyList(d) {
+  if (dailyCache[d]) return dailyCache[d];
+  const all = QS.filter(q => PAN.indexOf(q.cat) >= 0).map(q => ({ q, s: fnv1a(q.id + ':' + d) }));
+  const low = (a, b) => a.s - b.s, pick = [];
+  [[1, 3], [2, 4], [3, 3]].forEach(([dif, n]) => all.filter(x => x.q.d === dif).sort(low).slice(0, n).forEach(x => pick.push(x)));
+  if (pick.length < 10) all.filter(x => pick.indexOf(x) < 0).sort(low).slice(0, 10 - pick.length).forEach(x => pick.push(x));
+  return (dailyCache[d] = pick.sort((a, b) => a.q.d - b.q.d || a.s - b.s).map(x => x.q));
+}
+const todayDaily = () => S.daily && S.daily.day === today() ? S.daily : null;
+const dailyDone = () => { const D = todayDaily(); return !!(D && D.done); };
+const streakNow = () => S.streak.last >= today() - 1 ? S.streak.cur : 0;
+function renderDaily() {
+  const d = today(), D = todayDaily(), done = !!(D && D.done);
+  $('dailyCard').hidden = !dailyList(d).length;
+  $('dNo').textContent = t('dailyNo', { n: d });
+  $('dTodo').hidden = done;
+  $('dDone').hidden = !done;
+  if (!done) return;
+  fillGrid($('dGrid'), D.res, D.n);
+  $('dRes').textContent = D.correct + '/' + D.n + ' · ' + fmt(D.score) + ' pts';
+  $('dNext').textContent = t('nextIn', { t: clock(msToNextDay()) });
+}
+function fillGrid(box, res, n) {
+  clear(box);
+  for (let i = 0; i < n; i++) box.appendChild(el('i', res[i] === 'g' ? 'g' : res[i] === 'r' ? 'r' : ''));
+}
+const gridEmoji = (res, n) => { let s = ''; for (let i = 0; i < n; i++) s += res[i] === 'g' ? '🟩' : res[i] === 'r' ? '🟥' : '⬜'; return s; };
+function dailyShareText(D) {
+  const lines = [t('shDaily', { n: D.day }), t('shLine', { grid: gridEmoji(D.res, D.n), c: D.correct, t: D.n, pts: fmt(D.score) })];
+  const st = streakNow();
+  if (st > 0) lines.push(t('shStreak', { n: st }));
+  return lines.join('\n');
+}
+// Ends today's daily (also when the player left mid-way): unanswered questions count as missed.
+function finishDaily() {
+  const D = S.daily;
+  if (!D || D.done) return;
+  while (D.res.length < D.n) D.res += 'w';
+  D.done = true;
+  const st = S.streak;
+  if (st.last !== D.day) {
+    st.cur = st.last === D.day - 1 ? st.cur + 1 : 1;
+    st.last = D.day;
+    st.best = Math.max(st.best, st.cur);
+  }
+  S.stats.dailies++;
+  S.stats.games++;
+  S.xp += 50;
+  save();
+}
+
+/* ============ SHARE ============ */
+const gameUrl = () => AdBridge.native ? WEB_URL : location.origin + location.pathname.replace(/index\.html$/, '');
+// The phone's share menu when there is one, otherwise WhatsApp (how most players share).
+function share(text, url) {
+  if (navigator.share) { navigator.share({ text, url }).catch(() => {}); return; }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank', 'noopener');
+}
+
+/* ============ CLOCK (daily countdown) ============ */
+let clockTimer = 0, clockDay = 0;
+function runClock() {
+  clearInterval(clockTimer);
+  if (screen !== 'home' && !(screen === 'results' && R.daily)) return;
+  clockDay = today();
+  clockTimer = setInterval(() => {
+    if (today() !== clockDay) { clockDay = today(); if (screen === 'home') renderHome(); }
+    const txt = t('nextIn', { t: clock(msToNextDay()) });
+    if (screen === 'home') $('dNext').textContent = txt;
+    else if (R.daily) $('rNote').textContent = txt;
+  }, 1000);
+}
+
+/* ============ GAME: start & questions ============ */
+let G = { on: false };   // the game in progress
+let R = {};              // the last results, kept so they can be redrawn in another language
+const mult = run => run >= 6 ? 3 : run >= 3 ? 2 : 1; // combo: x2 after 3 right in a row, x3 after 6
+
+// Quick Play ('all'), one category, or a friend challenge (same category + seed = same questions).
+function startClassic(cat, ch) {
+  if (!isCat(cat)) return;
+  const pack = cat === 'all' ? (ch ? ch.pack : S.cc) : ''; // a challenge replays the challenger's question set
+  const pool = poolFor(cat, pack);
+  if (!pool.length) return;
+  beginGame({ mode: ch ? 'challenge' : cat === 'all' ? 'quick' : 'cat', cat, pack, seed: ch ? ch.seed : newSeed(), pool, ch, lives: LIVES });
+}
+function startDaily() {
+  const d = today(), list = dailyList(d);
+  if (!list.length || dailyDone()) return;
+  S.daily = { day: d, n: list.length, score: 0, correct: 0, res: '', done: false };
+  save(); // from now on, leaving early counts the unanswered questions as missed
+  beginGame({ mode: 'daily', cat: 'all', seed: fnv1a('daily:' + d), list, lives: 0 });
+}
+function beginGame(o) {
+  G = {
+    on: true, mode: o.mode, cat: o.cat, pack: o.pack || '', seed: o.seed >>> 0, pool: o.pool || null, list: o.list || null, ch: o.ch || null,
+    queue: [], round: 0, k: 0, q: null, perm: null, gone: [], locked: false, paused: false, running: false,
+    score: 0, lives: o.lives, run: 0, bestRun: 0, correct: 0, answered: 0, used: {}, continued: false,
+    saved: { answered: 0, correct: 0, scored: false }, left: TIME, max: TIME, end: 0, iv: 0, wait: 0, lastSec: -1,
+    xp0: S.xp, best0: nat(S.bests[o.cat]), runId: Date.now()
+  };
+  $('game').classList.remove('paused');
+  $('gLifes').hidden = o.mode === 'daily';
+  show('game');
+  nextQuestion();
+}
+// Progressive difficulty: each round sorts the whole pool by difficulty + random * 1.6 (seeded).
+function refill() {
+  const rnd = mulberry32((G.seed ^ Math.imul(G.round + 1, 0x9E3779B1)) >>> 0);
+  G.queue = G.pool.map(q => ({ q, k: q.d + rnd() * 1.6 })).sort((a, b) => a.k - b.k).map(x => x.q);
+  G.round++;
+}
+function nextQuestion() {
+  clearTimeout(G.wait);
+  if (G.mode === 'daily') G.q = G.list[G.k];
+  else { if (!G.queue.length) refill(); G.q = G.queue.shift(); }
+  // the answer order is seeded too, so a friend sees exactly the same screen
+  G.perm = shuffle([0, 1, 2, 3], mulberry32((G.seed + Math.imul(G.k + 1, 0x85EBCA6B)) >>> 0));
+  G.k++;
+  G.gone = [];
+  G.locked = false;
+  const btns = $('gOpts').children;
+  for (let i = 0; i < 4; i++) { btns[i].className = 'opt'; btns[i].firstChild.textContent = 'ABCD'[i]; btns[i].removeAttribute('aria-disabled'); }
+  document.querySelectorAll('#game .float, #gCard .qnote').forEach(n => n.remove());
+  renderGame();
+  startTimer(TIME);
+}
+// Draws the current question in the current language (keeps the same answer order).
+function renderGame() {
+  if (!G.q) return;
+  const q = G.q, txt = S.lang === 'fr' ? q.fr : q.en, daily = G.mode === 'daily', mixed = daily || G.cat === 'all';
+  $('gCat').className = 'catchip ' + catClass(daily ? 'all' : G.cat);
+  $('gCatE').textContent = daily ? '📅' : catEmoji(G.cat);
+  $('gCatN').textContent = daily ? t('daily') + ' ' + t('dailyNo', { n: S.daily ? S.daily.day : today() }) : catName(G.cat);
+  $('gCard').className = 'qcard ' + catClass(q.cat);
+  $('gCard').setAttribute('data-e', catEmoji(q.cat)); // faint watermark
+  $('gNum').textContent = daily ? t('qOf', { n: G.k, t: G.list.length }) : t('qNum', { n: G.k });
+  $('gDiff').textContent = (mixed ? catEmoji(q.cat) + ' ' : '') + t('d' + q.d);
+  $('gQ').textContent = tx(txt[0]);
+  $('gQ').classList.toggle('long', txt[0].length > 78);
+  const btns = $('gOpts').children;
+  for (let i = 0; i < 4; i++) btns[i].children[1].textContent = tx(txt[1 + G.perm[i]]);
+  renderHud();
+  setLifelines();
+}
+function renderHud() {
+  const daily = G.mode === 'daily', lives = $('gLives');
+  lives.hidden = daily;
+  $('gProg').hidden = !daily;
+  if (daily) $('gProg').textContent = '✅ ' + G.correct + '/' + G.list.length;
+  else {
+    clear(lives);
+    for (let i = 0; i < Math.max(LIVES, G.lives); i++) lives.appendChild(el('span', i < G.lives ? '' : 'lost', '❤️'));
+    lives.setAttribute('aria-label', t('lives') + ': ' + G.lives);
+  }
+  const m = mult(G.run);
+  $('gCombo').hidden = m < 2;
+  $('gCombo').textContent = '🔥 ×' + m;
+  $('gCombo').setAttribute('aria-label', t('combo', { n: m }));
+  $('gScore').textContent = '⭐ ' + fmt(G.score);
+}
+
+/* ============ GAME: timer ============
+   The bar shrinks with a single CSS transform transition (cheap on low-end phones);
+   a 100 ms interval handles the countdown logic. Paused while the page is hidden or a sheet is open. */
+function startTimer(sec) { G.left = sec; G.max = Math.max(TIME, sec); G.lastSec = -1; G.running = false; resumeTimer(); }
+function resumeTimer() {
+  if (!G.on || G.locked || G.running || G.paused || document.hidden) { if (G.on && !G.running) barTo(G.left / G.max, 0); return; }
+  G.running = true;
+  G.end = performance.now() + G.left * 1000;
+  barTo(G.left / G.max, G.left);
+  clearInterval(G.iv);
+  G.iv = setInterval(tick, 100);
+  tick();
+}
+function pauseTimer() {
+  if (!G.running) return;
+  G.running = false;
+  clearInterval(G.iv);
+  G.left = Math.max(0, (G.end - performance.now()) / 1000);
+  barTo(G.left / G.max, 0);
+}
+function barTo(ratio, secs) {
+  const bar = $('gBar');
+  bar.style.transition = 'none';
+  bar.style.transform = 'scaleX(' + clamp(ratio, 0, 1) + ')';
+  if (secs > 0 && !RM) {
+    void bar.offsetWidth; // apply the start position before animating
+    bar.style.transition = 'transform ' + secs.toFixed(2) + 's linear';
+    bar.style.transform = 'scaleX(0)';
+  }
+}
+function tick() {
+  const left = Math.max(0, (G.end - performance.now()) / 1000), sec = Math.ceil(left);
+  G.left = left;
+  if (RM) $('gBar').style.transform = 'scaleX(' + clamp(left / G.max, 0, 1) + ')';
+  if (sec !== G.lastSec) {
+    G.lastSec = sec;
+    $('gSecs').textContent = sec;
+    const low = sec <= 5;
+    $('gSecs').classList.toggle('low', low);
+    $('gTbar').classList.toggle('low', low);
+    if (low && sec > 0) sfx('tick');
+  }
+  if (left <= 0) { pauseTimer(); answer(-1); }
+}
+document.addEventListener('visibilitychange', () => {
+  if (!G.on) return;
+  if (document.hidden) pauseTimer(); else if (!sheet) resumeGame();
+});
+
+/* ============ GAME: answers & lifelines ============ */
+// slot = the tapped answer (0-3), or -1 when the time ran out.
+function answer(slot) {
+  if (!G.on || G.locked) return;
+  G.locked = true;
+  pauseTimer();
+  const btns = $('gOpts').children, right = G.perm.indexOf(0), ok = slot === right;
+  G.answered++;
+  for (let i = 0; i < 4; i++) {
+    btns[i].setAttribute('aria-disabled', 'true');
+    if (i !== right && i !== slot) btns[i].classList.add('dim');
+  }
+  btns[right].classList.add('ok');
+  btns[right].firstChild.textContent = '✓';
+  if (ok) {
+    const pts = (100 + Math.round(50 * Math.min(G.left, TIME) / TIME)) * mult(G.run);
+    G.score += pts;
+    G.run++;
+    G.correct++;
+    G.bestRun = Math.max(G.bestRun, G.run);
+    floatPts(btns[right], '+' + fmt(pts));
+    sfx('correct');
+    buzz(35);
+  } else {
+    if (slot >= 0) { btns[slot].classList.add('bad'); btns[slot].firstChild.textContent = '✗'; }
+    else cardNote('qnote', '⏱️ ' + t('timeUp'));
+    G.run = 0;
+    if (G.mode !== 'daily') G.lives--;
+    sfx('wrong');
+    buzz([70, 50, 70]);
+  }
+  if (G.mode === 'daily') saveDailyAnswer(ok ? 'g' : slot < 0 ? 'w' : 'r', ok);
+  renderHud();
+  setLifelines();
+  G.wait = setTimeout(advance, 900);
+}
+// After the feedback pause: next question or the end. Waits while the quit sheet is open.
+function advance() {
+  if (!G.on) return;
+  if (G.paused) { G.advanceLater = true; return; }
+  if (G.mode === 'daily' ? G.k >= G.list.length : G.lives <= 0) endGame();
+  else nextQuestion();
+}
+function cardNote(cls, text) { $('gCard').appendChild(el('span', cls, text)); }
+// '+150' floats up from the right answer.
+function floatPts(btn, text) {
+  const n = el('span', 'float', text);
+  btn.appendChild(n);
+  setTimeout(() => n.remove(), 1000);
+}
+// Daily progress is saved after every answer, so leaving early can't replay a question.
+function saveDailyAnswer(mark, ok) {
+  const D = S.daily;
+  if (!D || D.done) return;
+  D.res += mark;
+  D.score = G.score;
+  D.correct = G.correct;
+  S.stats.answers++;
+  if (ok) { S.stats.correct++; S.xp += 10; }
+  S.stats.combo = Math.max(S.stats.combo, G.bestRun);
+  save();
+}
+$('gOpts').addEventListener('click', e => {
+  const b = e.target.closest('.opt');
+  if (!b || b.classList.contains('gone')) return;
+  answer(Array.prototype.indexOf.call($('gOpts').children, b));
+});
+function setLifelines() {
+  const off = !G.on || G.locked || G.mode === 'daily';
+  $('l50').disabled = off || !!G.used.f50;
+  $('lTime').disabled = off || !!G.used.time;
+  $('lSkip').disabled = off || !!G.used.skip;
+}
+// 50:50 removes two wrong answers.
+$('l50').addEventListener('click', () => {
+  if (!G.on || G.locked || G.used.f50) return;
+  G.used.f50 = true;
+  const wrong = [0, 1, 2, 3].filter(i => G.perm[i] !== 0);
+  shuffle(wrong, Math.random).slice(0, 2).forEach(i => { G.gone.push(i); $('gOpts').children[i].classList.add('gone'); });
+  setLifelines();
+});
+// +10 s on the clock.
+$('lTime').addEventListener('click', () => {
+  if (!G.on || G.locked || G.used.time) return;
+  G.used.time = true;
+  pauseTimer();
+  G.left += 10;
+  G.max = Math.max(G.max, G.left);
+  resumeTimer();
+  setLifelines();
+});
+// Skip: next question, no points, no penalty, combo unchanged.
+$('lSkip').addEventListener('click', () => {
+  if (!G.on || G.locked || G.used.skip) return;
+  G.used.skip = true;
+  G.locked = true;
+  pauseTimer();
+  nextQuestion();
+});
+$('btnLang').addEventListener('click', () => setLang(S.lang === 'fr' ? 'en' : 'fr'));
+
+/* ============ GAME: quit & pause ============ */
+function askQuit() {
+  if (!G.on) return;
+  G.paused = true;
+  pauseTimer();
+  $('game').classList.add('paused'); // hide the question while paused
+  $('quitText').textContent = t(G.mode === 'daily' ? 'quitDaily' : 'quitText');
+  openSheet('sheetQuit');
+}
+function resumeGame() {
+  G.paused = false;
+  if (!G.on || document.hidden) return;
+  $('game').classList.remove('paused');
+  if (G.advanceLater) { G.advanceLater = false; advance(); return; }
+  resumeTimer();
+}
+// A quit classic game is not scored; a quit daily is finished (unanswered = missed).
+function quitGame() {
+  if (!G.on) return;
+  G.on = false;
+  pauseTimer();
+  clearTimeout(G.wait);
+  if (G.mode === 'daily') finishDaily();
+}
+$('btnQuit').addEventListener('click', askQuit);
+$('quitNo').addEventListener('click', () => closeSheet());
+$('quitYes').addEventListener('click', () => { quitGame(); closeSheet(); show('home'); });
+
+/* ============ GAME: end ============ */
+function endGame() {
+  G.on = false;
+  pauseTimer();
+  clearTimeout(G.wait);
+  if (G.mode === 'daily') {
+    finishDaily();
+    const D = S.daily;
+    R = { daily: true, day: D.day, score: D.score, correct: D.correct, n: D.n, res: D.res, xp0: G.xp0 };
+    showResults();
+    sfx('daily');
+    confetti();
+    return;
+  }
+  commitClassic();
+  R = { daily: false, mode: G.mode, cat: G.cat, pack: G.pack, score: G.score, correct: G.correct, answered: G.answered, bestRun: G.bestRun,
+    best0: G.best0, xp0: G.xp0, ch: G.ch, rank: 0, runId: G.runId };
+  showResults();
+  if (R.score > R.best0) confetti(); else sfx('over');
+  if (G.mode === 'quick' && G.score > 0) {
+    const runId = G.runId;
+    Leaderboard.submit({ id: runId, name: myName(), cc: S.cc, score: G.score, date: Date.now() })
+      .then(() => Leaderboard.top('all'))
+      .then(list => {
+        const pos = list.findIndex(e => String(e.id) === String(runId));
+        if (pos >= 0 && R.runId === runId && screen === 'results') { R.rank = pos + 1; renderResults(); }
+      }).catch(() => {});
+  }
+}
+// Adds this game to the saved stats. Safe to call again after "continue": only new answers count.
+function commitClassic() {
+  const sv = G.saved, st = S.stats, newRight = G.correct - sv.correct;
+  st.answers += G.answered - sv.answered;
+  st.correct += newRight;
+  S.xp += 10 * newRight + (sv.scored ? 0 : 5);
+  if (!sv.scored) st.games++;
+  st.combo = Math.max(st.combo, G.bestRun);
+  st.best = Math.max(st.best, G.score);
+  S.bests[G.cat] = Math.max(nat(S.bests[G.cat]), G.score);
+  sv.answered = G.answered;
+  sv.correct = G.correct;
+  sv.scored = true;
+  if (G.ch) S.ch = null; // challenge answered
+  save();
+}
+
+/* ============ RESULTS ============ */
+function showResults() {
+  R.seed = G.seed;
+  R.bestRun = G.bestRun;
+  $('adMsg').textContent = '';
+  renderResults();
+  show('results');
+  countUp($('rScore'), R.score);
+  const L = levelOf(S.xp);
+  if (L > (G.lvlShown || levelOf(G.xp0))) { // level-up toast + sound, once per level
+    G.lvlShown = L;
+    sfx('level');
+    confetti();
+    toast('⭐ ' + t('levelUp') + ' ' + t('levelTitle', { n: fmt(L), title: titleOf(L) }));
+  }
+}
+function renderResults() {
+  const daily = R.daily, L = levelOf(S.xp), lo = xpFor(L), hi = xpFor(L + 1);
+  const newBest = !daily && R.score > 0 && R.score > R.best0;
+  $('rEmoji').textContent = daily ? '📅' : newBest ? '🏆' : R.ch ? (R.score > R.ch.score ? '🥳' : '⚔️') : '🏁';
+  $('rTitle').textContent = daily ? t('dailyResTitle', { n: R.day }) : t('gameOver');
+  $('rSub').textContent = daily ? t('dailyCorrect', { c: R.correct, t: R.n }) : catEmoji(R.cat) + ' ' + catName(R.cat);
+  $('rScore').textContent = fmt(R.score);
+  $('rBadge').hidden = !newBest;
+  // Friend challenge verdict
+  const chBox = $('rCh');
+  chBox.hidden = !R.ch;
+  if (R.ch) {
+    const nm = R.ch.name || t('defaultName'), win = R.score > R.ch.score, tie = R.score === R.ch.score;
+    chBox.className = 'rch ' + (win ? 'win' : tie ? '' : 'lose');
+    clear(chBox).append((win ? '🎉 ' : tie ? '🤝 ' : '😅 ') + t(win ? 'youWin' : tie ? 'tie' : 'theyWin', { name: nm }),
+      el('small', 'num', t('vsLine', { a: fmt(R.score), name: nm, b: fmt(R.ch.score) })));
+  }
+  $('rGrid').hidden = !daily;
+  if (daily) fillGrid($('rGrid'), R.res, R.n);
+  const box = clear($('rStats'));
+  const stat = (value, key) => { const d = el('div', 'stat'); d.append(el('b', null, value), el('small', null, t(key))); box.appendChild(d); };
+  if (daily) {
+    stat(R.correct + '/' + R.n, 'rCorrect');
+    stat('🔥 ' + streakNow(), 'rStreak');
+    stat(fmt(R.bestRun), 'rCombo');
+  } else {
+    stat(fmt(R.correct), 'rCorrect');
+    stat(fmt(R.bestRun), 'rCombo');
+    stat(R.answered ? Math.round(100 * R.correct / R.answered) + '%' : '–', 'rAccuracy');
+  }
+  $('rLevel').textContent = t('levelTitle', { n: fmt(L), title: titleOf(L) });
+  $('rXp').textContent = t('xpGain', { n: fmt(Math.max(0, S.xp - R.xp0)) });
+  setBar($('rXpBar'), (S.xp - lo) / (hi - lo));
+  $('rLvlUp').hidden = levelOf(R.xp0) >= L;
+  $('rLvlUp').textContent = '⭐ ' + t('levelUp');
+  $('rNote').textContent = daily ? t('nextIn', { t: clock(msToNextDay()) })
+    : R.rank ? '🏆 ' + t('rank', { n: R.rank }) : newBest ? '' : t('bestWas', { n: fmt(Math.max(R.best0, R.score)) });
+  $('continueBtn').hidden = daily || !AdBridge.native || G.continued; // rewarded continue: Android app only, once per game
+  $('againBtn').hidden = daily;
+  $('challengeBtn').hidden = daily;
+  $('challengeLbl').textContent = t(R.ch ? 'challengeBack' : 'challenge');
+  $('shareLbl').textContent = t(daily ? 'shareResult' : 'shareScore');
+  $('shareBtn').className = 'btn' + (daily ? ' primary' : '');
+  $('shareBtn').parentNode.classList.toggle('single', daily); // daily: full-width Share, then Home
+}
+function countUp(node, to) {
+  if (RM || to <= 0) return;
+  const t0 = performance.now();
+  (function step(now) {
+    const k = Math.min(1, (now - t0) / 700);
+    node.textContent = fmt(Math.round(to * (1 - Math.pow(1 - k, 3))));
+    if (k < 1 && screen === 'results') requestAnimationFrame(step); else node.textContent = fmt(R.score);
+  })(t0);
+}
+// Android app only: watch an ad to continue with +1 life (once per game).
+$('continueBtn').addEventListener('click', () => {
+  $('adMsg').textContent = '';
+  AdBridge.showRewarded(() => {
+    G.continued = true;
+    G.on = true;
+    G.lives = 1;
+    show('game');
+    nextQuestion();
+  }, () => { $('adMsg').textContent = t('noAd'); });
+});
+let againCount = 0;
+$('againBtn').addEventListener('click', () => {
+  const cat = R.cat, go = () => startClassic(cat);
+  againCount++;
+  if (againCount % 2 === 0) AdBridge.showInterstitial(go); else go(); // interstitial: Android app only
+});
+// Challenge link: <game URL>#c=<cat>.<seed>.<score>.<name>.<country>.<pack country> (see readLinks)
+$('challengeBtn').addEventListener('click', () => {
+  const name = encodeURIComponent(myName()).replace(/\./g, '%2E');
+  const url = gameUrl() + '#c=' + [R.cat, (R.seed >>> 0).toString(36), R.score, name, S.cc, R.pack || ''].join('.');
+  share(t('shChallenge', { score: fmt(R.score), cat: catName(R.cat) }), url);
+});
+$('shareBtn').addEventListener('click', () => {
+  if (R.daily) { if (S.daily) share(dailyShareText(S.daily), gameUrl() + '?play=daily'); }
+  else share(t('shScore', { score: fmt(R.score) }), gameUrl());
+});
+$('homeBtn').addEventListener('click', () => show('home'));
+
+/* ============ LEADERBOARD ============
+   Online when FIREBASE_DB_URL is set (see firebase-setup.md): Africa-wide top 20 (/scores) and the
+   player's country top 20 (/countries/<CC>). Otherwise the top 10 on this phone. Quick Play scores only. */
+function cleanEntry(e) {
+  if (!e || typeof e !== 'object') return null;
+  const score = clamp(nat(e.score), 0, 9999999);
+  if (!score) return null;
+  return { id: String(e.id == null ? '' : e.id).slice(0, 24), name: cleanName(e.name) || 'Player', cc: validCc(e.cc), score, date: nat(e.date) };
+}
+const Leaderboard = {
+  failed: false,
+  online() { return !!FIREBASE_DB_URL; },
+  saveLocal(e) {
+    const l = S.board, i = l.findIndex(x => x.id === e.id);
+    if (i >= 0) l[i].score = Math.max(l[i].score, e.score); else l.push(e);
+    l.sort((a, b) => b.score - a.score || a.date - b.date);
+    S.board = l.slice(0, 10);
+    save();
+  },
+  async submit(entry) {
+    const e = cleanEntry(entry);
+    if (!e) return;
+    this.saveLocal(e);
+    if (!this.online()) return;
+    const body = JSON.stringify({ name: e.name, cc: e.cc, score: e.score, date: e.date });
+    const put = path => withTimeout(fetch(FIREBASE_DB_URL + path + '/r' + e.id + '.json',
+      { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body })).catch(() => {});
+    await Promise.all([put('/scores'), e.cc ? put('/countries/' + e.cc) : null]);
+  },
+  // tab: 'all' or a country code. Falls back to this phone's scores (and sets .failed) when offline.
+  async top(tab) {
+    this.failed = false;
+    if (!this.online()) return S.board.slice();
+    try {
+      const path = tab === 'all' ? '/scores' : '/countries/' + validCc(tab);
+      const r = await withTimeout(fetch(FIREBASE_DB_URL + path + '.json?orderBy=%22score%22&limitToLast=20'));
+      const o = await r.json();
+      if (!o || typeof o !== 'object' || o.error) throw new Error('no data');
+      return Object.keys(o).map(k => cleanEntry(Object.assign({}, o[k], { id: k.slice(1) }))).filter(Boolean)
+        .sort((a, b) => b.score - a.score || a.date - b.date).slice(0, 20);
+    } catch (e) { this.failed = true; return S.board.slice(); }
+  }
+};
+let boardTab = 'all', boardReq = 0;
+function openBoard() { boardTab = 'all'; show('board'); renderBoard(); }
+async function renderBoard() {
+  const online = Leaderboard.online(), tabs = online && !!S.cc, list = clear($('boardList')), req = ++boardReq;
+  if (!tabs) boardTab = 'all';
+  $('boardTabs').hidden = !tabs;
+  $('tabAll').textContent = '🌍 ' + t('tabAfrica');
+  $('tabCc').textContent = flag(S.cc) + ' ' + countryName(S.cc);
+  $('tabAll').setAttribute('aria-selected', String(boardTab === 'all'));
+  $('tabCc').setAttribute('aria-selected', String(boardTab !== 'all'));
+  $('boardNote').textContent = t('loading');
+  const rows = await Leaderboard.top(boardTab === 'all' ? 'all' : S.cc);
+  if (req !== boardReq) return; // a newer request is on its way
+  $('boardNote').textContent = !online ? '📱 ' + t('boardLocal') : Leaderboard.failed ? '📡 ' + t('offline') : '⚡ ' + t('boardQuick');
+  if (!rows.length) { list.appendChild(el('li', 'bnote', t('empty'))); return; }
+  rows.forEach((e, i) => {
+    const li = el('li', 'lrow' + (i < 3 ? ' top' : '') + (R.runId && String(e.id) === String(R.runId) ? ' me' : ''));
+    li.append(el('span', 'rk', ['🥇', '🥈', '🥉'][i] || String(i + 1)), el('span', 'fl', flag(e.cc)), el('span', 'nm', e.name), el('span', 'sc', fmt(e.score)));
+    list.appendChild(li);
+  });
+}
+$('boardTabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]');
+  if (b) { boardTab = b.getAttribute('data-tab'); renderBoard(); }
+});
+$('boardBack').addEventListener('click', () => show('home'));
+
+/* ============ SETTINGS ============ */
+function openSettings() { renderSettings(); openSheet('sheetSettings'); }
+function renderSettings() {
+  $('setSound').setAttribute('aria-checked', String(S.sound));
+  $('setVib').setAttribute('aria-checked', String(S.vib));
+  if (document.activeElement !== $('setName')) $('setName').value = S.name;
+  fillCountries($('setCountry'), S.cc);
+  const st = S.stats, box = clear($('setStats'));
+  const item = (key, value) => { const c = el('div', 'chip'); c.append(el('b', 'num', value), el('small', null, t(key))); box.appendChild(c); };
+  item('sGames', fmt(st.games));
+  item('sAnswers', fmt(st.answers));
+  item('sAccuracy', st.answers ? Math.round(100 * st.correct / st.answers) + '%' : '–');
+  item('sBest', fmt(st.best));
+  item('sCombo', fmt(st.combo));
+  item('sDailies', fmt(st.dailies));
+  item('sStreak', '🔥 ' + t('sStreakVal', { cur: streakNow(), best: S.streak.best }));
+}
+$('setLang').addEventListener('click', e => { const b = e.target.closest('[data-lang]'); if (b) setLang(b.getAttribute('data-lang')); });
+$('setSound').addEventListener('click', () => { S.sound = !S.sound; save(); renderSettings(); });
+$('setVib').addEventListener('click', () => { S.vib = !S.vib; save(); renderSettings(); buzz(40); });
+$('setName').addEventListener('input', () => { S.name = cleanName($('setName').value); save(); });
+$('setName').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+$('setCountry').addEventListener('change', () => { S.cc = validCc($('setCountry').value); save(); });
+$('setDone').addEventListener('click', () => closeSheet());
+// A soft click for every button except the answers (they have their own sounds).
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button');
+  if (b && !b.disabled && !b.classList.contains('opt')) sfx('tap');
+});
 
 /* ============ WEB APP (PWA) ============
    On the web, sw.js keeps a copy of the game on the phone so it opens without data,
    and players can install the game like an app. Not used inside the Android app. */
-if(!AdBridge.native){
-  if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
-  let installPrompt=null;
-  addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').style.display='block';});
-  addEventListener('appinstalled',()=>{$('installBtn').style.display='none';});
-  $('installBtn').onclick=()=>{
-    if(!installPrompt)return;
+if (AdBridge.native) document.body.classList.add('native');
+AdBridge.init();
+if (!AdBridge.native) {
+  if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  let installPrompt = null;
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; $('installBtn').hidden = false; });
+  addEventListener('appinstalled', () => { $('installBtn').hidden = true; });
+  $('installBtn').addEventListener('click', () => {
+    if (!installPrompt) return;
     installPrompt.prompt();
-    installPrompt=null;$('installBtn').style.display='none';
-  };
-  /* iPhones have no install button, it's done from the Share menu */
-  const installed=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-  if(!installed&&/iphone|ipad|ipod/i.test(navigator.userAgent))$('iosHint').style.display='block';
+    installPrompt = null;
+    $('installBtn').hidden = true;
+  });
+  // iPhones have no install button, it's done from the Share menu
+  const installed = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if (!installed && /iphone|ipad|ipod/i.test(navigator.userAgent)) $('iosHint').hidden = false;
 }
+
+/* ============ START ============ */
+document.querySelectorAll('img.logo').forEach(img => {
+  const hide = () => { img.style.visibility = 'hidden'; };
+  if (img.complete && !img.naturalWidth) hide(); else img.addEventListener('error', hide);
+});
+readLinks();
+if (S.daily && !S.daily.done) finishDaily(); // the player left a daily mid-way last time
+applyText();
+if (S.onboarded) { show('home'); runPending(); } else showOnboarding();
 </script>
 </body>
 </html>
